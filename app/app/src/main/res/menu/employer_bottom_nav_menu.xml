@@ -4,6 +4,9 @@
     <item android:id="@+id/Leaderboard"
         android:icon="@drawable/nav_leaderboard"
         android:title="Leaderboard"/>
+    <item android:id="@+id/checkEmployee"
+        android:icon="@drawable/nav_checkemployee"
+        android:title="checkEmployee"/>
     <item android:id="@+id/Profile"
         android:icon="@drawable/nav_profile"
         android:title="Profile"/>
