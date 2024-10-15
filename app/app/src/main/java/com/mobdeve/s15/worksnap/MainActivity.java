@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.Timestamp;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<EmployeeData> EmployeeDataList = new ArrayList<EmployeeData>();
-    private EmployeeAdapter EmployeeAdapter;
+    private ArrayList<DayAttendanceData> DayAttendanceList = new ArrayList<DayAttendanceData>();
+    private DayAttendanceAdapter DayAttendanceAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,17 +31,21 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        RecyclerView recyclerView = findViewById(R.id.allEmployeeRecycler);
+        RecyclerView recyclerView = findViewById(R.id.dayAttendanceRecycler);
         recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-
-        EmployeeDataList = new ArrayList<EmployeeData>();
-        for(int i = 0; i < 46; i++) {
-            EmployeeDataList.add(new EmployeeData("employee " + i));
+        DayAttendanceList = new ArrayList<DayAttendanceData>();
+        for(int i = 0; i < 20; i++) {
+            ArrayList<AttendancePhotoData> AttendancePhotoDataList = new ArrayList<AttendancePhotoData>();
+            int randomNumPhotos = (int) (Math.random() * 12 + 1);
+            for(int j = 0; j < randomNumPhotos; j++) {
+                AttendancePhotoDataList.add(new AttendancePhotoData());
+            }
+            DayAttendanceList.add(new DayAttendanceData(Timestamp.now(), AttendancePhotoDataList));
         }
 
-        EmployeeAdapter = new EmployeeAdapter(EmployeeDataList,MainActivity.this);
-        recyclerView.setAdapter(EmployeeAdapter);
+        DayAttendanceAdapter = new DayAttendanceAdapter(DayAttendanceList,MainActivity.this);
+        recyclerView.setAdapter(DayAttendanceAdapter);
     }
 }

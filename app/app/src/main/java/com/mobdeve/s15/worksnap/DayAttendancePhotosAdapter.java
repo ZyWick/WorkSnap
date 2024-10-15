@@ -1,27 +1,23 @@
 package com.mobdeve.s15.worksnap;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHolder> {
+public class DayAttendancePhotosAdapter extends RecyclerView.Adapter<DayAttendancePhotosAdapter.ViewHolder> {
 
-    ArrayList<EmployeeData> EmployeeData;
+    ArrayList<AttendancePhotoData> AttendancePhotoData;
     Context context;
 
-    public EmployeeAdapter(ArrayList<EmployeeData> EmployeeData, MainActivity activity) {
-        this.EmployeeData = EmployeeData;
+    public DayAttendancePhotosAdapter(ArrayList<AttendancePhotoData> AttendancePhotoData, MainActivity activity) {
+        this.AttendancePhotoData = AttendancePhotoData;
         this.context = activity;
     }
 
@@ -29,16 +25,15 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.employee_button,parent,false);
+        View view = layoutInflater.inflate(R.layout.attendancephotoholder,parent,false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final EmployeeData theEmployeeData = EmployeeData.get(position);
-        holder.employeeName.setText(theEmployeeData.getEmployeeName());
-        holder.employeeProfile.setImageResource(theEmployeeData.getEmployeeImage());
+        final AttendancePhotoData theAttendancePhotoData = AttendancePhotoData.get(position);
+        holder.attendancePhoto.setImageResource(theAttendancePhotoData.getAttendanceImage());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             /* TODO Call an intent for OrderActivity allowing you to order food */
@@ -51,20 +46,16 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return EmployeeData.size();
+        return AttendancePhotoData.size();
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView employeeProfile;
-        TextView employeeName;
-        TextView textViewDesc;
-        TextView textQty;
+        ImageView attendancePhoto;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            employeeProfile = itemView.findViewById(R.id.employeeProfileHolder);
-            employeeName = itemView.findViewById(R.id.profile_name);
+            attendancePhoto = itemView.findViewById(R.id.attendanceImage);
         }
     }
 
