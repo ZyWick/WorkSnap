@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         PhotoDataList = new ArrayList<MyPhotoData>();
         for(int i = 0; i < 46; i++) {
-            PhotoDataList.add(new MyPhotoData(R.drawable.nav_profile));
+            PhotoDataList.add(new MyPhotoData(R.drawable.user_filled));
         }
 
         MyPhotoAdapter = new MyPhotoAdapter(PhotoDataList,MainActivity.this);

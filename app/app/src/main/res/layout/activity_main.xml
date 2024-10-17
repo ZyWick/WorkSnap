@@ -49,13 +49,16 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/imageView5"
-                        android:layout_width="20dp"
-                        android:layout_height="100dp"
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="120dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_weight="1"
-                        android:visibility="visible"
-                        tools:srcCompat="@tools:sample/avatars" />
+                        android:foreground="@drawable/danda"
+                        app:cardCornerRadius="60dp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
