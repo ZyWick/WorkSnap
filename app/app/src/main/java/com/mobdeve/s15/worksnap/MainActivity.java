@@ -1,6 +1,9 @@
 package com.mobdeve.s15.worksnap;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +18,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private ArrayList<MyPhotoData> PhotoDataList;
     private MyPhotoAdapter MyPhotoAdapter;
+    TextView allphotosText;
+    TextView badgesText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
             return insets;
         });
+        allphotosText = findViewById(R.id.allphotosText);
+        badgesText = findViewById(R.id.badgesText);
         RecyclerView recyclerView = findViewById(R.id.allPhotosRecycler);
         recyclerView.setHasFixedSize(true);
 
@@ -37,5 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
         MyPhotoAdapter = new MyPhotoAdapter(PhotoDataList,MainActivity.this);
         recyclerView.setAdapter(MyPhotoAdapter);
+    }
+    public void chooseAllPhotos(View v){
+        allphotosText.setTypeface(null, Typeface.BOLD);
+        badgesText.setTypeface(null, Typeface.NORMAL);
+    }
+    public void chooseBadges(View v){
+        allphotosText.setTypeface(null, Typeface.NORMAL);
+        badgesText.setTypeface(null, Typeface.BOLD);
     }
 }
