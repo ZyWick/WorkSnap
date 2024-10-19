@@ -16,21 +16,6 @@
         android:id="@+id/header_view"
         app:layout_constraintTop_toTopOf="parent">
 
-    <include
-        layout="@layout/nav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/activity_camera_view_btn_gotocamera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="go to camera"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,6 +31,7 @@
             app:layout_anchorGravity="center" />
 
     </LinearLayout>
+
 
     <FrameLayout
         android:id="@+id/frameLayoutt"

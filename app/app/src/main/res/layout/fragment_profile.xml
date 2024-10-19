@@ -131,6 +131,7 @@
             >
 
             <LinearLayout
+                android:id="@+id/activity_camera_view_btn_gotocamera"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#F8D580"
