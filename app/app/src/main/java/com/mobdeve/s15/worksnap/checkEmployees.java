@@ -3,10 +3,17 @@ package com.mobdeve.s15.worksnap;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.Timestamp;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +30,9 @@ public class checkEmployees extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ArrayList<DayAttendanceData> DayAttendanceList = new ArrayList<DayAttendanceData>();
+    private DayAttendanceAdapter DayAttendanceAdapter;
 
     public checkEmployees() {
         // Required empty public constructor
@@ -59,6 +69,28 @@ public class checkEmployees extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_check_employees, container, false);
+        View view = inflater.inflate(R.layout.fragment_check_employees, container, false);
+
+        // Initialize RecyclerView
+        RecyclerView recyclerView = view.findViewById(R.id.dayAttendanceRecycler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        DayAttendanceList = new ArrayList<DayAttendanceData>();
+        for(int i = 0; i < 20; i++) {
+            ArrayList<AttendancePhotoData> AttendancePhotoDataList = new ArrayList<AttendancePhotoData>();
+            int randomNumPhotos = (int) (Math.random() * 12 + 1);
+            for(int j = 0; j < randomNumPhotos; j++) {
+                AttendancePhotoDataList.add(new AttendancePhotoData());
+            }
+            DayAttendanceList.add(new DayAttendanceData(Timestamp.now(), AttendancePhotoDataList));
+        }
+
+        DayAttendanceAdapter = new DayAttendanceAdapter(DayAttendanceList, (MainActivity) getActivity());
+        recyclerView.setAdapter(DayAttendanceAdapter);
+
+        return view;
     }
 }
+
+

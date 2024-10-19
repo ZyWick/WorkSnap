@@ -17,7 +17,7 @@ public class EmployeeData {
     public EmployeeData(String employeeName) {
         this.employeeName = employeeName;
         this.employeeID = 1;
-        this.employeeImage = R.drawable.ic_launcher_foreground;
+        this.employeeImage = R.drawable.danda;
         this.badges = new int[]{};
     }
 
