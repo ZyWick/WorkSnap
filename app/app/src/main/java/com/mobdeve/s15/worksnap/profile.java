@@ -1,5 +1,6 @@
 package com.mobdeve.s15.worksnap;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -30,6 +33,9 @@ public class profile extends Fragment {
     private MyPhotoAdapter MyPhotoAdapter;
     TextView allphotosText;
     TextView badgesText;
+
+
+    LinearLayout btnGoToCamera;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -90,6 +96,16 @@ public class profile extends Fragment {
 
         MyPhotoAdapter = new MyPhotoAdapter(PhotoDataList,(MainActivity) getActivity());
         recyclerView.setAdapter(MyPhotoAdapter);
+
+        btnGoToCamera = view.findViewById(R.id.activity_camera_view_btn_gotocamera);
+
+        btnGoToCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CameraView.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
