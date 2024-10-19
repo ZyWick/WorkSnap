@@ -20,5 +20,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:srcCompat="@drawable/danda" />
 
+<!--    <androidx.appcompat.widget.AppCompatRadioButton-->
+<!--        android:id="@+id/rbtn_test"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="0dp"-->
+<!--        app:buttonTint="@color/white"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
