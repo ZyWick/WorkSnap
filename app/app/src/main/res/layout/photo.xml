@@ -10,5 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        app:srcCompat="@drawable/nav_profile" />
+        app:srcCompat="@drawable/nav_profile"
+        android:scaleType="centerCrop"/>
 </LinearLayout>
