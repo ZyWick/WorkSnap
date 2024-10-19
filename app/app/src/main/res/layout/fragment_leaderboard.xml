@@ -1,101 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".leaderboard">
+    tools:context=".checkEmployees">
+
+    <!-- Collapsible AppBarLayout with TextViews -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <LinearLayout
+                android:id="@+id/leaderboardText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="26dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="26dp"
+                android:paddingBottom="10dp">
+
+                <!-- Leaderboard Title -->
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Leaderboard"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_gravity="center_vertical" />
+
+                <!-- Daily/Weekly/Monthly Tabs -->
+                <LinearLayout
+                    android:id="@+id/date_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="60dp">
+
+                    <!-- Daily Tab -->
+
+                    <TextView
+                        android:id="@+id/tab_daily"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Daily"
+                        android:textSize="14sp"
+                        android:textColor="@android:color/darker_gray"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="4dp" />
+
+                    <!-- Separator -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:text="/"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14sp" />
+
+                    <!-- Weekly Tab -->
+                    <TextView
+                        android:id="@+id/tab_weekly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Weekly"
+                        android:textSize="14sp"
+                        android:textColor="@android:color/darker_gray"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="4dp" />
+
+                    <!-- Separator -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:text="/"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14sp" />
+
+                    <!-- Monthly Tab -->
+                    <TextView
+                        android:id="@+id/tab_monthly"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Monthly"
+                        android:textSize="14sp"
+                        android:textColor="@android:color/darker_gray"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="4dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:id="@+id/leaderboardText"
-        android:layout_width="wrap_content"
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="26dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="26dp">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Leaderboard Title -->
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Leaderboard"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:layout_gravity="center_vertical" />
-
-        <!-- Daily/Weekly/Monthly Tabs -->
-        <LinearLayout
-            android:id="@+id/date_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="60dp">
-
-            <!-- Daily Tab -->
-
-            <TextView
-                android:id="@+id/tab_daily"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Daily"
-                android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="4dp" />
-
-            <!-- Separator -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:text="/"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="14sp" />
-
-            <!-- Weekly Tab -->
-            <TextView
-                android:id="@+id/tab_weekly"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Weekly"
-                android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="4dp" />
-
-            <!-- Separator -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:text="/"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="14sp" />
-
-            <!-- Monthly Tab -->
-            <TextView
-                android:id="@+id/tab_monthly"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Monthly"
-                android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="4dp" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Horizontal Divider -->
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/leaderboardRecyclerView"
         android:layout_width="match_parent"
@@ -103,7 +126,9 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/leaderboardText"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         app:layout_constraintVertical_bias="0.0"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
