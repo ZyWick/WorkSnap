@@ -23,7 +23,7 @@
             android:paddingBottom="10dp"
             app:layout_scrollFlags="scroll|enterAlways|snap">
 
-            <androidx.cardview.widget.CardView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -31,12 +31,6 @@
                 android:backgroundTint="#8EEDE2"
                 app:cardCornerRadius="20dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:outlineProvider="none"
-                    app:cardCornerRadius="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -44,10 +38,9 @@
                         android:orientation="horizontal">
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="0dp"
+                            android:layout_width="105dp"
                             android:layout_height="match_parent"
                             android:layout_margin="10dp"
-                            android:layout_weight="1"
                             app:cardCornerRadius="160dp">
                             <ImageView
                                 android:layout_width="match_parent"
@@ -82,17 +75,19 @@
                                 android:textSize="24sp" />
                         </LinearLayout>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <ProgressBar
-                android:layout_marginTop="20dp"
-                style="?android:attr/progressBarStyleHorizontal"
+            <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleY="6"
-                android:progress="65"
-                android:progressBackgroundTint="@color/DarkBlue" />
+                android:layout_marginTop="20dp"
+                android:progress="68"
+                app:indicatorColor="@color/Blue"
+                app:trackColor="@color/DarkBlue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:trackThickness="20dp"
+                app:trackCornerRadius="50dp"/>
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
