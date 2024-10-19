@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <include
         layout="@layout/header"
         android:id="@+id/include_header"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="55dp"
+        android:background="@color/DarkBlue"
+        android:id="@+id/header_view"
+        app:layout_constraintTop_toTopOf="parent">
 
     <include
         layout="@layout/nav"
@@ -132,5 +138,48 @@
         app:layout_constraintTop_toTopOf="@id/include_header"
         app:layout_constraintVertical_bias="0.0" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/konkhmer_sleokchher"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="-14dp"
+            android:paddingStart="26dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="26dp"
+            android:text="WorkSnap"
+            android:textColor="@color/lightBlue"
+            android:textSize="33sp"
+            app:layout_anchorGravity="center" />
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/frameLayoutt"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_view">
+
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:labelVisibilityMode="unlabeled"
+        android:background="@drawable/nav_top_outline"
+        android:paddingTop="2dp"
+        app:itemActiveIndicatorStyle="@style/ShapeAppearance.Material3.Corner.None"
+        app:itemRippleColor="@null"
+        app:menu="@menu/employer_bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
