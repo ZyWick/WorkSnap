@@ -9,7 +9,7 @@
         android:id="@+id/lbRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:background="@android:color/transparent"
@@ -35,9 +35,8 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.375"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.346" />
 
@@ -50,20 +49,20 @@
                 app:layout_constraintHorizontal_bias="0.106"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/user" />
+                app:srcCompat="@drawable/user"
+                android:scaleType="centerCrop"/>
 
             <ProgressBar
                 android:id="@+id/customProgressBar"
                 style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="224dp"
-                android:layout_height="20dp"
-                android:layout_margin="16dp"
-                android:max="100"
-                android:progressDrawable="@drawable/progress_bar"
+                android:layout_width="246dp"
+                android:layout_height="18dp"
+                android:layout_marginVertical="16dp"
+                android:layout_marginStart="10dp"
+                android:progress="70"
+                android:scaleY="4"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.789"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.804" />
 
@@ -86,8 +85,7 @@
                     android:id="@+id/imageView4"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/user"
-                     />
+                    android:src="@drawable/user" />
 
                 <ImageView
                     android:id="@+id/imageView5"
