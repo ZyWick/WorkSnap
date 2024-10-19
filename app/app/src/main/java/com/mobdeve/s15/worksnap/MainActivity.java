@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
             int itemId = item.getItemId();
             if (itemId == R.id.LeaderboardMenu) {
+                // placed here for now
+                replaceFragment(new PostListFragment());
             } else if (itemId == R.id.ProfileMenu) {
             } else if (itemId == R.id.allEmployeesMenu) {
                 replaceFragment(new AllEmployee());
