@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.protolite.well.known.types)
     implementation(libs.firebase.common)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

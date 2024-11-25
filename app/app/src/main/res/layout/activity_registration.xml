@@ -94,26 +94,29 @@
                     android:id="@+id/rb_employer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Employer"
-                    android:padding="8dp"/>
+                    android:onClick="hideEmployerIDInput"
+                    android:padding="8dp"
+                    android:text="Employer" />
 
                 <RadioButton
                     android:id="@+id/rb_employee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Employee"
-                    android:padding="8dp"/>
+                    android:onClick="showEmployerIDInput"
+                    android:padding="8dp"
+                    android:text="Employee" />
             </RadioGroup>
 
             <!-- Employer ID (Visible only if Employee is selected) -->
 
             <TextView
+                android:id="@+id/employer_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Employer ID"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="5dp"
-                android:visibility="gone"/>
+                android:text="Employer ID"
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/et_employer_id"
@@ -127,6 +130,19 @@
                 />
 
             <!-- Register Button -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title" />
+
+            <EditText
+                android:id="@+id/et_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_background"
+                android:inputType="text"
+                android:padding="12dp" />
+
             <Button
                 android:id="@+id/btn_register"
                 android:layout_width="match_parent"
