@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -52,7 +51,7 @@ public class LB_RecyclerViewAdapter extends RecyclerView.Adapter<LB_RecyclerView
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             employeeNameTextView = itemView.findViewById(R.id.textView);
-            employeeImageView = itemView.findViewById(R.id.imageView);
+            employeeImageView = itemView.findViewById(R.id.textureView);
 
             badgeImageViews = new ArrayList<>(3);
             badgeImageViews.add(itemView.findViewById(R.id.imageView4));
