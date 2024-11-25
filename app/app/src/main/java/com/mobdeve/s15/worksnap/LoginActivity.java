@@ -27,6 +27,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){ //check if user is already logged in
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
         EditText emailEditText = findViewById(R.id.username);
         EditText passwordEditText = findViewById(R.id.password);
         Button loginButton = findViewById(R.id.login_button);

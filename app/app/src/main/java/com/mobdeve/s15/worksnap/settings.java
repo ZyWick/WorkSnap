@@ -1,5 +1,6 @@
 package com.mobdeve.s15.worksnap;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +64,31 @@ public class settings extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        // Find the sign-out button
+        TextView signOutButton = view.findViewById(R.id.btn_signout);
+
+        // Set an OnClickListener for the button
+        signOutButton.setOnClickListener(v -> {
+            // Sign out from Firebase Auth
+            FirebaseAuth.getInstance().signOut();
+
+            // Show a confirmation message
+            Toast.makeText(getActivity(), "Signed out successfully!", Toast.LENGTH_SHORT).show();
+
+            // Redirect to Login Activity
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            // Close the current activity (optional)
+            if (getActivity() != null) {
+                getActivity().finish();
+            }
+        });
+
+        return view;
     }
+
 }
