@@ -41,6 +41,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = emailEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
+                // Check if the email or password is empty
+                if (email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
+                    return; // Exit early if either field is empty
+                }
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
