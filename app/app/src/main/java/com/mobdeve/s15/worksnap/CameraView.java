@@ -24,6 +24,7 @@ import android.location.Location;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Size;
@@ -55,7 +56,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -76,6 +81,9 @@ public class CameraView extends AppCompatActivity {
     private ImageReader imageReader;
     private Bitmap capturedBitmap;
     private FirebaseAuth mAuth;
+    private Handler handler = new Handler(); // Declare the handler globally
+    private Runnable checkStateRunnable;
+    private List<TimePeriod> timePeriods = new ArrayList<>(); ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +101,9 @@ public class CameraView extends AppCompatActivity {
         captureButton = findViewById(R.id.capture);
         retakeButton = findViewById(R.id.btn_retake);
         uploadButton = findViewById(R.id.btn_upload);
+        Log.d(TAG, "DEBUG1");
+        // Fetch time range from Firestore
+        fetchTimeRangeFromFirestore(captureButton);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -138,6 +149,13 @@ public class CameraView extends AppCompatActivity {
                 uploadButton.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Remove all pending callbacks to prevent memory leaks
+        handler.removeCallbacks(checkStateRunnable);
     }
 
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
@@ -328,26 +346,26 @@ public class CameraView extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Failed to upload: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
-                    Map<String, Integer> increments = new HashMap<>();
-                    increments.put("image_count_today", 1);
-                    increments.put("image_count_week", 1);
-                    increments.put("image_count_year", 1);
-                    Map<String, Object> updates = new HashMap<>();
-                    for (Map.Entry<String, Integer> entry : increments.entrySet()) {
-                        updates.put(entry.getKey(), FieldValue.increment(entry.getValue()));
-                    }
-
-                    // Update the document
-                    db.collection("users").document(uid)
-                            .update(updates)
-                            .addOnSuccessListener(aVoid -> {
-                                // Handle success
-                                System.out.println("Values incremented successfully.");
-                            })
-                            .addOnFailureListener(e -> {
-                                // Handle failure
-                                System.err.println("Error incrementing values: " + e.getMessage());
-                            });
+//                    Map<String, Integer> increments = new HashMap<>();
+//                    increments.put("image_count_today", 1);
+//                    increments.put("image_count_week", 1);
+//                    increments.put("image_count_year", 1);
+//                    Map<String, Object> updates = new HashMap<>();
+//                    for (Map.Entry<String, Integer> entry : increments.entrySet()) {
+//                        updates.put(entry.getKey(), FieldValue.increment(entry.getValue()));
+//                    }
+//
+//                    // Update the document
+//                    db.collection("users").document(uid)
+//                            .update(updates)
+//                            .addOnSuccessListener(aVoid -> {
+//                                // Handle success
+//                                System.out.println("Values incremented successfully.");
+//                            })
+//                            .addOnFailureListener(e -> {
+//                                // Handle failure
+//                                System.err.println("Error incrementing values: " + e.getMessage());
+//                            });
                 } else {
                     Toast.makeText(getApplicationContext(), "Unable to fetch address", Toast.LENGTH_SHORT).show();
                 }
@@ -380,6 +398,139 @@ public class CameraView extends AppCompatActivity {
         return null; // Return null if unable to fetch address
     }
 
+    private void fetchTimeRangeFromFirestore(ImageButton button) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        assert user != null;
+        String uid = user.getUid();
+        db.collection("users").document(uid).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Get time_start and time_end from Firestore
+                        String timeStart = documentSnapshot.getString("work_start"); // e.g., "08:00"
+                        String timeEnd = documentSnapshot.getString("work_end");     // e.g., "15:40"
+                        // Generate 10-minute intervals
+                        generateTimePeriods(timeStart, timeEnd);
+                        logTimePeriods();
+                        logCurrentTime();
+                        // Start the periodic button state check
+                        startPeriodicCheck(button);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "DEBUGFAIL");
+                    e.printStackTrace();
+                });
+    }
+
+    private void generateTimePeriods(String timeStart, String timeEnd) {
+        if (!timeStart.isEmpty() && !timeEnd.isEmpty()){
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                Date startDate = sdf.parse(timeStart);
+                Date endDate = sdf.parse(timeEnd);
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(startDate);
+
+                timePeriods.clear(); // Clear the list in case it's reused
+
+                while (calendar.getTime().before(endDate)) {
+                    Date periodStart = calendar.getTime();
+
+                    // Add 10 minutes for the end of the interval
+                    calendar.add(Calendar.MINUTE, 10);
+                    Date periodEnd = calendar.getTime();
+
+                    // Add the period to the list
+                    timePeriods.add(new TimePeriod(
+                            getHour(periodStart), getMinute(periodStart),
+                            getHour(periodEnd), getMinute(periodEnd)
+                    ));
+
+                    // Skip ahead by at least one hour
+                    calendar.add(Calendar.HOUR_OF_DAY, 1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private int getHour(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.HOUR_OF_DAY);
+    }
+
+    private int getMinute(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.MINUTE);
+    }
+
+    private void startPeriodicCheck(ImageButton button) {
+        checkStateRunnable = new Runnable() {
+            @Override
+            public void run() {
+                checkButtonState(button);
+                handler.postDelayed(this, 60000); // Schedule the next check after 60 seconds
+            }
+        };
+
+        handler.post(checkStateRunnable);
+    }
+
+    // Method to check and update button state
+    private void checkButtonState(ImageButton button) {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        // Check if the current time falls within any time period
+        boolean isWithinTime = false;
+        for (TimePeriod period : timePeriods) {
+            if (isTimeWithinRange(hour, minute, period.startHour, period.startMinute, period.endHour, period.endMinute)) {
+                isWithinTime = true;
+                break;
+            }
+        }
+
+        // Update button state
+        button.setEnabled(isWithinTime);
+        button.setAlpha(isWithinTime ? 1.0f : 0.5f);
+    }
+
+    // Utility method for time range checking
+    private boolean isTimeWithinRange(int currentHour, int currentMinute, int startHour, int startMinute, int endHour, int endMinute) {
+        int currentTime = currentHour * 60 + currentMinute;
+        int startTime = startHour * 60 + startMinute;
+        int endTime = endHour * 60 + endMinute;
+
+        return currentTime >= startTime && currentTime <= endTime;
+    }
+
+    public void logTimePeriods() {
+        for (TimePeriod period : timePeriods) {
+            String periodString = String.format("Start: %02d:%02d, End: %02d:%02d",
+                    period.startHour, period.startMinute,
+                    period.endHour, period.endMinute);
+            Log.d("TimePeriods", periodString);
+        }
+    }
+
+    public void logCurrentTime() {
+        // Get the current time
+        Calendar calendar = Calendar.getInstance();
+
+        // Format the time (HH:mm format, 24-hour clock)
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        String currentTime = sdf.format(calendar.getTime());
+
+        // Log the current time
+        Log.d("CurrentTime", "Current Time: " + currentTime);
+    }
+
     private void toggleImage() {
 //        if (isOkarun) {
 //            imageView.setImageResource(R.drawable.momo);
@@ -400,5 +551,17 @@ public class CameraView extends AppCompatActivity {
         scaleDown.setRepeatMode(ObjectAnimator.REVERSE);
 
         scaleDown.start();
+    }
+}
+
+// Class to represent a time period
+class TimePeriod {
+    int startHour, startMinute, endHour, endMinute;
+
+    TimePeriod(int startHour, int startMinute, int endHour, int endMinute) {
+        this.startHour = startHour;
+        this.startMinute = startMinute;
+        this.endHour = endHour;
+        this.endMinute = endMinute;
     }
 }
