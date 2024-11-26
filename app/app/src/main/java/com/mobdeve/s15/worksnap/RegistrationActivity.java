@@ -74,7 +74,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 if (selectedRole.equals("Employee")){
                     ArrayList<String> documentIDs = new ArrayList<>();
                     db.collection("users")
-                            .whereEqualTo("role", "Employer") // Query for Role == Employer
                             .get()
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
@@ -107,29 +106,24 @@ public class RegistrationActivity extends AppCompatActivity {
                                     Log.d(TAG, "createUserWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser(); //get the current user
                                     Map<String, Object> User = new HashMap<>();
-                                    if (selectedRole.equals("Employee")){
-                                        ArrayList<badgesData> badges = new ArrayList<>();
-                                        User.put("username", fullName);
-                                        User.put("profilePhoto", R.drawable.danda);
-                                        User.put("title", title);
-                                        User.put("email", email);
+                                    ArrayList<badgesData> badges = new ArrayList<>();
+                                    ArrayList<String> employeeIDs = new ArrayList<>();
+                                    User.put("username", fullName);
+                                    User.put("profilePhoto", R.drawable.danda);
+                                    User.put("title", title);
+                                    User.put("email", email);
+                                    if (validEmployerID)
                                         User.put("employer", employerID);
-                                        User.put("work_start", "");
-                                        User.put("work_end", "");
-                                        User.put("image_count_today", 0);
-                                        User.put("image_count_week", 0);
-                                        User.put("image_count_year", 0);
-                                        User.put("badges", badges);
-                                    }
-                                    else{
-                                        ArrayList<String> employeeIDs = new ArrayList<>();
-                                        User.put("username", fullName);
-                                        User.put("profilePhoto", R.drawable.danda);
-                                        User.put("title", title);
-                                        User.put("email", email);
-                                        User.put("role", "Employer");
-                                        User.put("employees", employeeIDs);
-                                    }
+                                    else
+                                        User.put("employer", "");
+                                    User.put("employees", employeeIDs);
+                                    User.put("work_start", "");
+                                    User.put("work_end", "");
+                                    User.put("image_count_today", 0);
+                                    User.put("image_count_week", 0);
+                                    User.put("image_count_year", 0);
+                                    User.put("badges", badges);
+
                                     assert user != null;
                                     String uid = user.getUid();
                                     db.collection("users").document(uid)
@@ -146,7 +140,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                                     Log.w(TAG, "Error writing document", e);
                                                 }
                                             });
-                                    if (selectedRole.equals("Employee") && validEmployerID){
+                                    if (validEmployerID){
                                         db.collection("users")
                                                 .document(employerID)
                                                 .update("employees", FieldValue.arrayUnion(uid))
