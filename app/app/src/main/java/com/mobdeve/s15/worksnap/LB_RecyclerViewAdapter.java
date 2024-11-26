@@ -41,7 +41,7 @@ public class LB_RecyclerViewAdapter extends RecyclerView.Adapter<LB_RecyclerView
 
     @Override
     public int getItemCount() {
-        return 45;
+        return leaderboardModels.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
