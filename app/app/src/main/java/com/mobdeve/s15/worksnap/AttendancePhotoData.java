@@ -1,33 +1,56 @@
 package com.mobdeve.s15.worksnap;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.ServerTimestamp;
+
+import java.util.Date;
 
 public class AttendancePhotoData {
 
+    @DocumentId
+    private DocumentReference imageID;
     private String employeeName;
-    private int employeeID;
+    private DocumentReference employeeID;
     private Integer attendanceImage;
-    private Timestamp takenAt;
+    private @ServerTimestamp Date takenAt;
+//    private Timestamp takenAt;
     private double lon;
     private double lat;
+    private boolean verified;
+    private boolean rejected;
 
-
-    public AttendancePhotoData(String employeeName, int employeeID, Integer foodImage, Timestamp takenAt, double lon, double lat) {
+    public AttendancePhotoData(DocumentReference imageID, String employeeName, DocumentReference employeeID, Integer attendanceImage,
+                               Date takenAt, double lon, double lat, boolean verified, boolean rejected) {
+        this.imageID = imageID;
         this.employeeName = employeeName;
         this.employeeID = employeeID;
-        this.attendanceImage = foodImage;
+        this.attendanceImage = attendanceImage;
         this.takenAt = takenAt;
         this.lon = lon;
         this.lat = lat;
+        this.verified = verified;
+        this.rejected = rejected;
+    }
+
+    public AttendancePhotoData(int a) {
+        this.employeeName = "Charles";
+        this.attendanceImage = R.drawable.danda;
+        this.lon = 0.0040124;
+        this.lat = 0.2313044;
     }
 
     public AttendancePhotoData() {
-        this.employeeName = "Charles";
-        this.employeeID = 1;
-        this.attendanceImage = R.drawable.danda;
-        this.takenAt = Timestamp.now();
-        this.lon = 0.0040124;
-        this.lat = 0.2313044;
+
+    }
+
+    public DocumentReference getImageID() {
+        return imageID;
+    }
+
+    public void setImageID(DocumentReference imageID) {
+        this.imageID = imageID;
     }
 
     public String getEmployeeName() {
@@ -38,11 +61,11 @@ public class AttendancePhotoData {
         this.employeeName = employeeName;
     }
 
-    public int getEmployeeID() {
+    public DocumentReference getEmployeeID() {
         return employeeID;
     }
 
-    public void setEmployeeID(int employeeID) {
+    public void setEmployeeID(DocumentReference employeeID) {
         this.employeeID = employeeID;
     }
 
@@ -53,13 +76,15 @@ public class AttendancePhotoData {
     public void setAttendanceImage(Integer attendanceImage) {
         this.attendanceImage = attendanceImage;
     }
-    public Timestamp getTakenAt() {
+
+    public Date getTakenAt() {
         return takenAt;
     }
 
-    public void setTakenAt(Timestamp takenAt) {
+    public void setTakenAt(Date takenAt) {
         this.takenAt = takenAt;
     }
+
     public double getLon() {
         return lon;
     }
@@ -67,6 +92,7 @@ public class AttendancePhotoData {
     public void setLon(double lon) {
         this.lon = lon;
     }
+
     public double getLat() {
         return lat;
     }
@@ -75,6 +101,20 @@ public class AttendancePhotoData {
         this.lat = lat;
     }
 
+    public boolean isVerified() {
+        return verified;
+    }
 
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public boolean isRejected() {
+        return rejected;
+    }
+
+    public void setRejected(boolean rejected) {
+        this.rejected = rejected;
+    }
 
 }

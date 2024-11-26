@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -16,9 +19,12 @@ public class DayAttendancePhotosAdapter extends RecyclerView.Adapter<DayAttendan
     ArrayList<AttendancePhotoData> AttendancePhotoData;
     Context context;
 
-    public DayAttendancePhotosAdapter(ArrayList<AttendancePhotoData> AttendancePhotoData, MainActivity activity) {
+    private FragmentManager fragmentManager;
+
+    public DayAttendancePhotosAdapter(ArrayList<AttendancePhotoData> AttendancePhotoData, MainActivity activity, FragmentManager fragmentManager) {
         this.AttendancePhotoData = AttendancePhotoData;
         this.context = activity;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
@@ -40,6 +46,13 @@ public class DayAttendancePhotosAdapter extends RecyclerView.Adapter<DayAttendan
             @Override
             public void onClick(View v) {
                 /* Remove this and replace it with an intent call*/
+                Fragment newFragment = new PostListFragment(); // Replace with your fragment class
+
+                // Begin the fragment transaction
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frameLayoutt, newFragment); // R.id.frameLayoutt is your container
+                fragmentTransaction.addToBackStack(null); // Optionally add to back stack
+                fragmentTransaction.commit();
             }
         });
     }
