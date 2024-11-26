@@ -1,5 +1,7 @@
 package com.mobdeve.s15.worksnap;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
@@ -16,15 +18,21 @@ import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -35,9 +43,24 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 public class CameraView extends AppCompatActivity {
 
@@ -52,6 +75,7 @@ public class CameraView extends AppCompatActivity {
     private CaptureRequest.Builder captureRequestBuilder;
     private ImageReader imageReader;
     private Bitmap capturedBitmap;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +86,7 @@ public class CameraView extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
         }
+        mAuth = FirebaseAuth.getInstance();
         textureView = findViewById(R.id.textureView);
         textureView.setSurfaceTextureListener(textureListener);
         flipCameraButton = findViewById(R.id.flipCamera);
@@ -108,6 +133,9 @@ public class CameraView extends AppCompatActivity {
                 if (capturedBitmap != null) {
                     uploadImageToFirebase(capturedBitmap);
                 }
+                startPreview();
+                retakeButton.setVisibility(View.GONE);
+                uploadButton.setVisibility(View.GONE);
             }
         });
     }
@@ -261,30 +289,95 @@ public class CameraView extends AppCompatActivity {
     }
 
     private void uploadImageToFirebase(Bitmap bitmap) {
-        // Convert Bitmap to ByteArray
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); // Compress as JPEG
-//        byte[] data = baos.toByteArray();
-//
-//        // Get a reference to Firebase Storage
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//        StorageReference storageRef = storage.getReference();
-//        StorageReference imagesRef = storageRef.child("images/captured_image_" + System.currentTimeMillis() + ".jpg");
-//
-//        // Upload the image
-//        UploadTask uploadTask = imagesRef.putBytes(data);
-//        uploadTask.addOnSuccessListener(taskSnapshot -> {
-//            // Get the download URL
-//            imagesRef.getDownloadUrl().addOnSuccessListener(uri -> {
-//                // Handle success - e.g., display a toast or log the URL
-//                Toast.makeText(CameraActivity.this, "Upload successful!", Toast.LENGTH_SHORT).show();
-//                Log.d("FirebaseStorage", "Download URL: " + uri.toString());
-//            });
-//        }).addOnFailureListener(e -> {
-//            // Handle failure
-//            Toast.makeText(CameraActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//            e.printStackTrace();
-//        });
+        // Get Firestore instance
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        assert user != null;
+        String uid = user.getUid();
+        String imageId = UUID.randomUUID().toString(); // Generates a unique ID
+        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return;
+        }
+        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                // 3. Perform Reverse Geocoding to get the address
+                String address = getAddressFromLocation(location);
+
+                if (address != null) {
+                    // 4. Convert the image to a Base64 string
+                    String base64Image = bitmapToBase64(bitmap);
+
+                    // 5. Prepare the data for Firestore
+                    Map<String, Object> imageData = new HashMap<>();
+                    imageData.put("user_id", uid);
+                    imageData.put("imageBase64", base64Image);
+                    imageData.put("location", address);
+                    imageData.put("created_at", System.currentTimeMillis());
+                    imageData.put("verified" ,false);
+                    imageData.put("rejected", false);
+
+                    // 6. Upload the data to Firestore
+                    db.collection("images").document(imageId).set(imageData)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getApplicationContext(), "Image uploaded with address!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Failed to upload: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    Map<String, Integer> increments = new HashMap<>();
+                    increments.put("image_count_today", 1);
+                    increments.put("image_count_week", 1);
+                    increments.put("image_count_year", 1);
+                    Map<String, Object> updates = new HashMap<>();
+                    for (Map.Entry<String, Integer> entry : increments.entrySet()) {
+                        updates.put(entry.getKey(), FieldValue.increment(entry.getValue()));
+                    }
+
+                    // Update the document
+                    db.collection("users").document(uid)
+                            .update(updates)
+                            .addOnSuccessListener(aVoid -> {
+                                // Handle success
+                                System.out.println("Values incremented successfully.");
+                            })
+                            .addOnFailureListener(e -> {
+                                // Handle failure
+                                System.err.println("Error incrementing values: " + e.getMessage());
+                            });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Unable to fetch address", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Unable to fetch location", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream); // Compress to JPEG
+        byte[] byteArray = outputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+    private String getAddressFromLocation(Location location) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+
+                // Combine the address parts into a single string
+                return address.getAddressLine(0); // Full address (e.g., "123 Main St, City, Country")
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null; // Return null if unable to fetch address
     }
 
     private void toggleImage() {
