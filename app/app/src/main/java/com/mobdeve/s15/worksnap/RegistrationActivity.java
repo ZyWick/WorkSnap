@@ -40,13 +40,14 @@ import java.util.Map;
 
 public class RegistrationActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private boolean validEmployerID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
         mAuth = FirebaseAuth.getInstance();//get FireBase Authentication instance
-
+        validEmployerID = false;
         EditText fullNameEditText = findViewById(R.id.et_name);
         EditText emailEditText = findViewById(R.id.et_email);
         EditText passwordEditText = findViewById(R.id.et_password);
@@ -86,7 +87,10 @@ public class RegistrationActivity extends AppCompatActivity {
                                     Log.d("Document IDs", "" + documentIDs);
                                     if (employerID.isEmpty() || !documentIDs.contains(employerID)) {
                                         Toast.makeText(RegistrationActivity.this, "Invalid Employer ID!", Toast.LENGTH_SHORT).show();
-                                        return;                                   }
+                                    }
+                                    else{
+                                        validEmployerID = true;
+                                    }
                                 } else {
                                     // Handle the error
                                     System.err.println("Error getting documents: " + task.getException().getMessage());
@@ -142,7 +146,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                                     Log.w(TAG, "Error writing document", e);
                                                 }
                                             });
-                                    if (selectedRole.equals("Employee")){
+                                    if (selectedRole.equals("Employee") && validEmployerID){
                                         db.collection("users")
                                                 .document(employerID)
                                                 .update("employees", FieldValue.arrayUnion(uid))
