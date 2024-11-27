@@ -22,118 +22,46 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/changePassword"
+        android:id="@+id/changeUserDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_outline"
         app:layout_constraintTop_toBottomOf="@+id/more">
 
         <TextView
+            android:id="@+id/btn_change_user_details"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginVertical="20dp"
-            android:text="Change password"
+            android:text="Change User Details"
             android:textSize="15sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/changePhoto"
+        android:id="@+id/changePassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_outline"
-        app:layout_constraintTop_toBottomOf="@+id/changePassword">
+        app:layout_constraintTop_toBottomOf="@+id/changeUserDetails">
 
         <TextView
+            android:id="@+id/btn_change_password"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginVertical="20dp"
-            android:text="Change Photo"
+            android:text="Change Password"
             android:textSize="15sp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/changeEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bottom_outline"
-        app:layout_constraintTop_toBottomOf="@+id/changePhoto">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="20dp"
-            android:text="Change Email"
-            android:textSize="15sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/changeName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bottom_outline"
-        app:layout_constraintTop_toBottomOf="@+id/changeEmail">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="20dp"
-            android:text="Change Name"
-            android:textSize="15sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/addEmployer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bottom_outline"
-        app:layout_constraintTop_toBottomOf="@+id/changeName">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="20dp"
-            android:text="Add Employer"
-            android:textSize="15sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/notificationSettings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bottom_outline"
-        app:layout_constraintTop_toBottomOf="@+id/addEmployer">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="20dp"
-            android:text="Notifications"
-            android:textSize="15sp" />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/privacySettings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bottom_outline"
-        app:layout_constraintTop_toBottomOf="@+id/notificationSettings">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="20dp"
-            android:text="Privacy"
-            android:textSize="15sp" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/signoutSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_outline"
-        app:layout_constraintTop_toBottomOf="@id/privacySettings">
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="183dp"
+        app:layout_constraintTop_toBottomOf="@+id/changePassword">
 
         <TextView
             android:id="@+id/btn_signout"

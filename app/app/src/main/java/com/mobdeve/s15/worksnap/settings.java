@@ -29,6 +29,10 @@ public class settings extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private TextView changeUserDetailsButton;
+    private TextView changePasswordButton;
+    private TextView signOutButton;
+
     public settings() {
         // Required empty public constructor
     }
@@ -63,26 +67,44 @@ public class settings extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        // Find the sign-out button
-        TextView signOutButton = view.findViewById(R.id.btn_signout);
+        changeUserDetailsButton = view.findViewById(R.id.btn_change_user_details);
+        changeUserDetailsButton.setOnClickListener(v -> {
+            Fragment fragment = new EditDetailsFragment();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayoutt, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
-        // Set an OnClickListener for the button
+        changePasswordButton = view.findViewById(R.id.btn_change_password);
+        changePasswordButton.setOnClickListener(v -> {
+            Fragment fragment = new ChangePasswordFragment();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayoutt, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        changePasswordButton = view.findViewById(R.id.btn_change_password);
+        changePasswordButton.setOnClickListener(v -> {
+            Fragment fragment = new ChangePasswordFragment();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayoutt, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        signOutButton = view.findViewById(R.id.btn_signout);
         signOutButton.setOnClickListener(v -> {
-            // Sign out from Firebase Auth
             FirebaseAuth.getInstance().signOut();
-
-            // Show a confirmation message
             Toast.makeText(getActivity(), "Signed out successfully!", Toast.LENGTH_SHORT).show();
 
-            // Redirect to Login Activity
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
-            // Close the current activity (optional)
             if (getActivity() != null) {
                 getActivity().finish();
             }
