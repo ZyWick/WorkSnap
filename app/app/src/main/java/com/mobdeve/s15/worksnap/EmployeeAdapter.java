@@ -20,7 +20,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
+
 
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHolder> {
@@ -55,10 +58,10 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
             // Load image into ImageView using Glide
-            glide.with(context)
+            Glide.with(context)
                     .load(imageUrl)
-                    .placeholder("https://firebasestorage.googleapis.com/v0/b/worksnap-9bdb3.firebasestorage.app/o/images%2F20b6e58c-40bb-40b7-9530-84ac1540efde.jpg?alt=media&token=1db735be-2832-4f71-aa8c-42a30c877f46") // Optional: Add a placeholder image
-                    .error("https://firebasestorage.googleapis.com/v0/b/worksnap-9bdb3.firebasestorage.app/o/images%2F20b6e58c-40bb-40b7-9530-84ac1540efde.jpg?alt=media&token=1db735be-2832-4f71-aa8c-42a30c877f46")       // Optional: Add an error image
+                    .placeholder(R.drawable.danda) // Optional: Add a placeholder image
+                    .error(R.drawable.momo)       // Optional: Add an error image
                     .into(holder.employeeProfile);
         } else {
             // Handle missing URL

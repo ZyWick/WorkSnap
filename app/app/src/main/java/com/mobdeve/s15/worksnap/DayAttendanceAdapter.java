@@ -67,15 +67,15 @@ public class DayAttendanceAdapter extends RecyclerView.Adapter<DayAttendanceAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final DayAttendanceData theDayAttendanceData = DayAttendanceData.get(position);
 
-        Date date = theDayAttendanceData.getDate().toDate();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM / dd / yy", Locale.getDefault());
-        holder.dayDate.setText(sdf.format(date));
+//        Date date = theDayAttendanceData.getDate().toDate();
+//        SimpleDateFormat sdf = new SimpleDateFormat("MM / dd / yy", Locale.getDefault());
+        holder.dayDate.setText(theDayAttendanceData.getDate());
 
-        if (isToday(date, Timestamp.now().toDate())) holder.dayText.setText("Today");
-        else {
-            sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
-            holder.dayText.setText(sdf.format(date));
-        }
+//        if (isToday(date, Timestamp.now().toDate())) holder.dayText.setText("Today");
+//        else {
+//            sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
+//            holder.dayText.setText(sdf.format(date));
+//        }
 
 
         holder.photosRecycler.setHasFixedSize(true);

@@ -1,31 +1,41 @@
 package com.mobdeve.s15.worksnap;
 
-import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DayAttendanceData {
-    private Timestamp Date;
-    private ArrayList<AttendancePhotoData> AttendancePhotoDataList;
 
-    public DayAttendanceData(Timestamp Date, ArrayList<AttendancePhotoData> AttendancePhotoDataList) {
-        this.Date = Date;
-        this.AttendancePhotoDataList = AttendancePhotoDataList;
+    private String date;
+    private ArrayList<AttendancePhotoData> attendancePhotoDataList;
+
+    public DayAttendanceData(String date) {
+        this.date = date;
+        this.attendancePhotoDataList = new ArrayList<>();
     }
 
-    public Timestamp getDate() {
-        return Date;
+    public DayAttendanceData() {
+
     }
 
-    public void setDate(Timestamp Date) {
-        this.Date = Date;
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public ArrayList<AttendancePhotoData> getAttendancePhotoDataList() {
-        return AttendancePhotoDataList;
+        return attendancePhotoDataList;
+    }
+
+    public void addAttendancePhotoData(AttendancePhotoData data) {
+        this.attendancePhotoDataList.add(data);
     }
 
     public void setAttendancePhotoDataList(ArrayList<AttendancePhotoData> AttendancePhotoDataList) {
-        this.AttendancePhotoDataList = AttendancePhotoDataList;
+        this.attendancePhotoDataList = AttendancePhotoDataList;
     }
 }

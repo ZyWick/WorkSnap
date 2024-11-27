@@ -25,10 +25,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -93,18 +101,13 @@ public class checkEmployees extends Fragment {
 
     public void getEmployeeIDs(String userID, HereOnEmployeeIDsFetchedListener listener) {
         DocumentReference docRef = usersRef.document(userID);
-        Log.e(TAG, "Employee412323 Name111111111111:" + userID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                Log.e(TAG, "Employee412323 Name:2222222222222222" + getResources().getString(R.string.hello_blank_fragment));
                 if (task.isSuccessful()) {
-                    Log.e(TAG, "Employee412323 Name:2222222222222222" + getResources().getString(R.string.hello_blank_fragment));
                     DocumentSnapshot document = task.getResult();
-                    Log.e(TAG, "Employee412323 Name:2222222222222222" + getResources().getString(R.string.hello_blank_fragment));
                     if (document.exists()) {
                         try {
-                            Log.e(TAG, "Employee412323 Name:2222222222222222" + getResources().getString(R.string.hello_blank_fragment));
                             // Safely retrieve the list of employee IDs
                             List<String> employees = (List<String>) document.getData().get("employees");
                             if (employees != null) {
@@ -129,6 +132,33 @@ public class checkEmployees extends Fragment {
         });
     }
 
+    public ArrayList<DayAttendanceData> groupByDay(ArrayList<AttendancePhotoData> attendanceList) {
+        // Map to hold grouped data by day
+        Map<String, ArrayList<AttendancePhotoData>> groupedByDay = new HashMap<>();
+
+        // Date formatter for grouping by day (format: yyyy-MM-dd)
+        SimpleDateFormat dayFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (AttendancePhotoData data : attendanceList) {
+            // Format the created_at date to get the day
+            String day = dayFormatter.format(data.getCreated_at());
+
+            // Group AttendancePhotoData by day
+            groupedByDay.computeIfAbsent(day, k -> new ArrayList<>()).add(data);
+        }
+
+        // Convert the map to ArrayList<DayAttendanceData>
+        ArrayList<DayAttendanceData> dayAttendanceDataList = new ArrayList<>();
+        for (Map.Entry<String, ArrayList<AttendancePhotoData>> entry : groupedByDay.entrySet()) {
+            DayAttendanceData dayAttendanceData = new DayAttendanceData();
+            dayAttendanceData.setDate(entry.getKey()); // Set the day
+            dayAttendanceData.setAttendancePhotoDataList(entry.getValue()); // Set the list for that day
+            dayAttendanceDataList.add(dayAttendanceData);
+        }
+
+        return dayAttendanceDataList;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -140,7 +170,6 @@ public class checkEmployees extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.dayAttendanceRecycler);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        Log.e(TAG, "Employee412323 Nadasdme:" + getResources().getString(R.string.hello_blank_fragment));
         getEmployeeIDs("AKDCcjF5NOhBu9vKpLenIGQhfO02", new HereOnEmployeeIDsFetchedListener() {
             @Override
             public void onSuccess(ArrayList<String> employeeIDs) {
@@ -154,16 +183,23 @@ public class checkEmployees extends Fragment {
                             if (task.isSuccessful()) {
                                 QuerySnapshot querySnapshot = task.getResult();
                                 if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                                    Log.e(TAG, "Employee412323 Name:" + getResources().getString(R.string.hello_blank_fragment));
-                                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                                        // Safely retrieve the "name" and "position" fields
-//                                        String name = document.getString("username");
-//                                        String pic = document.getString("profilePhoto");
-//
-//                                        // Add employee data to the list
-//                                        EmployeeDataList.add(new EmployeeData(name, pic, document.getId()));
-                                        Log.e(TAG, "gello" + document);
-                                    }
+
+                                    ArrayList<AttendancePhotoData> a = new ArrayList<>();
+                                    for (QueryDocumentSnapshot document : task.getResult())
+                                        a.add(document.toObject(AttendancePhotoData.class));
+
+                                    ArrayList<DayAttendanceData> groupedData = groupByDay(a);
+
+                                    groupedData.sort(new Comparator<DayAttendanceData>() {
+                                        @Override
+                                        public int compare(DayAttendanceData o1, DayAttendanceData o2) {
+                                            return o1.getDate().compareTo(o2.getDate()); // Descending order
+                                        }
+                                    });
+
+                                    DayAttendanceAdapter = new DayAttendanceAdapter(groupedData, (MainActivity) getActivity(),  getParentFragmentManager());
+                                    recyclerView.setAdapter(DayAttendanceAdapter);
+
                                     // Initialize the adapter after data is fetched
 //                                    EmployeeAdapter employeeAdapter = new EmployeeAdapter(EmployeeDataList, (MainActivity) getActivity(), getParentFragmentManager());
 //                                    recyclerView.setAdapter(employeeAdapter);
@@ -185,18 +221,16 @@ public class checkEmployees extends Fragment {
         });
 
 
-        DayAttendanceList = new ArrayList<DayAttendanceData>();
-        for(int i = 0; i < 20; i++) {
-            ArrayList<AttendancePhotoData> AttendancePhotoDataList = new ArrayList<AttendancePhotoData>();
-            int randomNumPhotos = (int) (Math.random() * 12 + 1);
-            for(int j = 0; j < randomNumPhotos; j++) {
-                AttendancePhotoDataList.add(new AttendancePhotoData());
-            }
-            DayAttendanceList.add(new DayAttendanceData(Timestamp.now(), AttendancePhotoDataList));
-        }
+//        DayAttendanceList = new ArrayList<DayAttendanceData>();
+//        for(int i = 0; i < 20; i++) {
+//            ArrayList<AttendancePhotoData> AttendancePhotoDataList = new ArrayList<AttendancePhotoData>();
+//            int randomNumPhotos = (int) (Math.random() * 12 + 1);
+//            for(int j = 0; j < randomNumPhotos; j++) {
+//                AttendancePhotoDataList.add(new AttendancePhotoData());
+//            }
+////            DayAttendanceList.add(new DayAttendanceData(Timestamp.now(), AttendancePhotoDataList));
+//        }
 
-        DayAttendanceAdapter = new DayAttendanceAdapter(DayAttendanceList, (MainActivity) getActivity(),  getParentFragmentManager());
-        recyclerView.setAdapter(DayAttendanceAdapter);
 
         return view;
     }

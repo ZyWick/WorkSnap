@@ -12,6 +12,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class DayAttendancePhotosAdapter extends RecyclerView.Adapter<DayAttendancePhotosAdapter.ViewHolder> {
@@ -39,7 +41,20 @@ public class DayAttendancePhotosAdapter extends RecyclerView.Adapter<DayAttendan
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final AttendancePhotoData theAttendancePhotoData = AttendancePhotoData.get(position);
-        holder.attendancePhoto.setImageResource(theAttendancePhotoData.getAttendanceImage());
+
+        String imageUrl = theAttendancePhotoData.getImageLink();
+
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            // Load image into ImageView using Glide
+            Glide.with(context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.danda) // Optional: Add a placeholder image
+                    .error(R.drawable.momo)       // Optional: Add an error image
+                    .into(holder.attendancePhoto);
+        } else {
+            // Handle missing URL
+            System.out.println("Image URL is empty!");
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             /* TODO Call an intent for OrderActivity allowing you to order food */

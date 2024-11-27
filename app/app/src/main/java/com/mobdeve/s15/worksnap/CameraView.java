@@ -48,6 +48,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
@@ -350,7 +351,7 @@ public class CameraView extends AppCompatActivity {
                             imageData.put("user_id", uid);
                             imageData.put("imageLink", downloadUrl);
                             imageData.put("location", address);
-                            imageData.put("created_at", System.currentTimeMillis());
+                            imageData.put("created_at", new Timestamp(new Date()));
                             imageData.put("verified" ,false);
                             imageData.put("rejected", false);
                             // 9. Save the URL and other info to Firestore

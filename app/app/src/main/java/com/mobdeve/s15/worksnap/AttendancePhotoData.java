@@ -11,34 +11,32 @@ public class AttendancePhotoData {
 
     @DocumentId
     private DocumentReference imageID;
-    private String employeeName;
-    private DocumentReference employeeID;
-    private Integer attendanceImage;
-    private @ServerTimestamp Date takenAt;
+//    private String employeeName;
+    private String user_id;
+    private String imageLink;
+    private @ServerTimestamp Date created_at;
 //    private Timestamp takenAt;
-    private double lon;
-    private double lat;
+    private String location;
     private boolean verified;
     private boolean rejected;
 
-    public AttendancePhotoData(DocumentReference imageID, String employeeName, DocumentReference employeeID, Integer attendanceImage,
-                               Date takenAt, double lon, double lat, boolean verified, boolean rejected) {
+    public AttendancePhotoData(DocumentReference imageID, String employeeName, String user_id,
+                               String imageLink, Date created_at, String location,
+                               boolean verified, boolean rejected) {
         this.imageID = imageID;
-        this.employeeName = employeeName;
-        this.employeeID = employeeID;
-        this.attendanceImage = attendanceImage;
-        this.takenAt = takenAt;
-        this.lon = lon;
-        this.lat = lat;
+//        this.employeeName = employeeName;
+        this.user_id = user_id;
+        this.imageLink = imageLink;
+        this.created_at = created_at;
+        this.location = location;
         this.verified = verified;
         this.rejected = rejected;
     }
 
     public AttendancePhotoData(int a) {
-        this.employeeName = "Charles";
-        this.attendanceImage = R.drawable.danda;
-        this.lon = 0.0040124;
-        this.lat = 0.2313044;
+//        this.employeeName = "Charles";
+        this.imageLink = "https://firebasestorage.googleapis.com/v0/b/worksnap-9bdb3.firebasestorage.app/o/images%2F20b6e58c-40bb-40b7-9530-84ac1540efde.jpg?alt=media&token=1db735be-2832-4f71-aa8c-42a30c877f46";
+
     }
 
     public AttendancePhotoData() {
@@ -53,52 +51,44 @@ public class AttendancePhotoData {
         this.imageID = imageID;
     }
 
-    public String getEmployeeName() {
-        return employeeName;
+//    public String getEmployeeName() {
+//        return employeeName;
+//    }
+//
+//    public void setEmployeeName(String employeeName) {
+//        this.employeeName = employeeName;
+//    }
+
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
-    public DocumentReference getEmployeeID() {
-        return employeeID;
+    public String getImageLink() {
+        return imageLink;
     }
 
-    public void setEmployeeID(DocumentReference employeeID) {
-        this.employeeID = employeeID;
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
-    public Integer getAttendanceImage() {
-        return attendanceImage;
+    public Date getCreated_at() {
+        return created_at;
     }
 
-    public void setAttendanceImage(Integer attendanceImage) {
-        this.attendanceImage = attendanceImage;
+    public void setCreated_at(Date created_at) {
+        this.created_at = created_at;
     }
 
-    public Date getTakenAt() {
-        return takenAt;
+    public String getLocation() {
+        return location;
     }
 
-    public void setTakenAt(Date takenAt) {
-        this.takenAt = takenAt;
-    }
-
-    public double getLon() {
-        return lon;
-    }
-
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public boolean isVerified() {
@@ -116,5 +106,4 @@ public class AttendancePhotoData {
     public void setRejected(boolean rejected) {
         this.rejected = rejected;
     }
-
 }
