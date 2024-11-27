@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,7 +53,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final EmployeeData theEmployeeData = EmployeeData.get(position);
         holder.employeeName.setText(theEmployeeData.getEmployeeName());
-
+        String employeeID = theEmployeeData.getidHJAAJJA();
 
         String imageUrl = theEmployeeData.getEmployeeImage();
 
@@ -72,7 +73,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 /* Remove this and replace it with an intent call*/
-                Fragment newFragment = new profile(); // Replace with your fragment class
+                Fragment newFragment = profile.newInstance(employeeID); // Replace with your fragment class
 
                 // Begin the fragment transaction
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

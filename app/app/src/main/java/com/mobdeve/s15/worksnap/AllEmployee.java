@@ -129,11 +129,11 @@ public class AllEmployee extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (getArguments() != null)
+            uid = getArguments().getString("uid");
 
         db = FirebaseFirestore.getInstance();
         usersRef = db.collection(MyFirestoreReferences.USERS_COLLECTION);
-        if (getArguments() != null)
-            uid = getArguments().getString("uid");
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_all_employee, container, false);
