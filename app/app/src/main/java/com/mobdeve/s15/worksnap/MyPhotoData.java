@@ -1,17 +1,19 @@
 package com.mobdeve.s15.worksnap;
 
+import android.graphics.Bitmap;
+
 public class MyPhotoData {
-    public Integer getPhotoImage() {
-        return photoImage;
+    private String imageUrl;
+
+    public MyPhotoData(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public void setPhotoImage(Integer photoImage) {
-        this.photoImage = photoImage;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    private Integer photoImage;
-
-    public MyPhotoData(Integer photoImage)     {
-        this.photoImage = photoImage;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

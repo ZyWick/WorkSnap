@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mobdeve.s15.worksnap.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,7 +29,11 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.LeaderboardMenu) {
                 replaceFragment(new leaderboard());
             } else if (itemId == R.id.ProfileMenu) {
-                replaceFragment(new profile());
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (currentUser != null) {
+                    String uid = currentUser.getUid();
+                    replaceFragment(profile.newInstance(uid));
+                }
             } else if (itemId == R.id.allEmployeesMenu) {
                 replaceFragment(new AllEmployee());
             } else if (itemId == R.id.checkEmployeeMenu) {
