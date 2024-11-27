@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                         } else if (isEmployee) {
                             bottomNavigationView.getMenu().clear();
                             bottomNavigationView.inflateMenu(R.menu.menu_c);
-                            replaceFragment(new settings());
+                            replaceFragment(new leaderboard());
                         }
 
                     } else {

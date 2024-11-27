@@ -182,7 +182,7 @@ public class leaderboard extends Fragment {
                                     imageCountYearly,
                                     employeeName
                             ));
-                            adapter.notifyDataSetChanged(); // Notify adapter of changes
+                            sortLeaderboard("weekly");// Notify adapter of changes
                         } else {
                             Log.e("FirestoreError", "Failed to fetch employee data", task.getException());
                         }
