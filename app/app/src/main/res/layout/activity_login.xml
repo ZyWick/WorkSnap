@@ -24,12 +24,12 @@
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Username"
-        android:background="@drawable/input_background"
-        android:padding="12dp"
-        android:textSize="16sp"
         android:layout_marginBottom="16dp"
-        android:inputType="text" />
+        android:background="@drawable/input_background"
+        android:hint="Email"
+        android:inputType="text"
+        android:padding="12dp"
+        android:textSize="16sp" />
 
     <!-- Password input -->
     <EditText
