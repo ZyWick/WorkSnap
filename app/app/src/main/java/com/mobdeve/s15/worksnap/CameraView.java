@@ -51,6 +51,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -346,23 +347,40 @@ public class CameraView extends AppCompatActivity {
                         // 7. Get the download URL after successful upload
                         imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                             String downloadUrl = uri.toString();
-                            // 8. Prepare the data for Firestore
-                            Map<String, Object> imageData = new HashMap<>();
-                            imageData.put("user_id", uid);
-                            imageData.put("imageLink", downloadUrl);
-                            imageData.put("location", address);
-                            imageData.put("created_at", new Timestamp(new Date()));
-                            imageData.put("verified" ,false);
-                            imageData.put("rejected", false);
-                            // 9. Save the URL and other info to Firestore
-                            db.collection("images").document(imageId).set(imageData)
-                                    .addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            Toast.makeText(getApplicationContext(), "Image uploaded with address!", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "Failed to upload: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                            // 8. Get the user's username
+                            db.collection("users").document(uid).get().addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        // Access fields in the document
+                                        String username = document.getString("username");
+                                        // Log the retrieved data
+                                        Log.d(TAG, "Username: " + username);
+                                        // 9. Prepare the data for Firestore
+                                        Map<String, Object> imageData = new HashMap<>();
+                                        imageData.put("user_id", uid);
+                                        imageData.put("username", username);
+                                        imageData.put("imageLink", downloadUrl);
+                                        imageData.put("location", address);
+                                        imageData.put("created_at", new Timestamp(new Date()));
+                                        imageData.put("verified" ,false);
+                                        imageData.put("rejected", false);
+                                        // 10. Save the URL, username and other info to Firestore
+                                        db.collection("images").document(imageId).set(imageData)
+                                                .addOnCompleteListener(job -> {
+                                                    if (job.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), "Image uploaded with address!", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(getApplicationContext(), "Failed to upload: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    } else {
+                                        Log.d(TAG, "No such document!");
+                                    }
+                                } else {
+                                    Log.d(TAG, "Failed to retrieve document: ", task.getException());
+                                }
+                            });
                         }).addOnFailureListener(e -> {
                             // Error: Failed to get the download URL
                             e.printStackTrace();

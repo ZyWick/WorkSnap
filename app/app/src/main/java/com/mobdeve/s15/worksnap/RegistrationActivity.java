@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +32,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.Transaction;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -105,57 +108,77 @@ public class RegistrationActivity extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser(); //get the current user
-                                    Map<String, Object> User = new HashMap<>();
-                                    ArrayList<badgesData> badges = new ArrayList<>();
-                                    ArrayList<String> employeeIDs = new ArrayList<>();
-                                    User.put("username", fullName);
-                                    User.put("profilePhoto", "https://firebasestorage.googleapis.com/v0/b/worksnap-9bdb3.firebasestorage.app/o/images%2Fdanda.jpeg?alt=media&token=651730df-277c-4c9e-b08a-8c36acaec419");
-                                    User.put("title", title);
-                                    User.put("email", email);
-                                    if (validEmployerID)
-                                        User.put("employer", employerID);
-                                    else
-                                        User.put("employer", "");
-                                    User.put("employees", employeeIDs);
-                                    User.put("work_start", "");
-                                    User.put("work_end", "");
-                                    User.put("image_count_today", 0);
-                                    User.put("image_count_week", 0);
-                                    User.put("image_count_year", 0);
-                                    User.put("badges", badges);
-
-                                    assert user != null;
-                                    String uid = user.getUid();
-                                    db.collection("users").document(uid)
-                                            .set(User)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                                    // Create a reference to the default profile photo
+                                    StorageReference storageReference = storage.getReference().child("images/danda.jpeg");
+                                    // Retrieve the download URL
+                                    storageReference.getDownloadUrl()
+                                            .addOnSuccessListener(new OnSuccessListener<Uri>() {
                                                 @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Log.d(TAG, "Registered User successfully added!");
+                                                public void onSuccess(Uri uri) {
+                                                    // Successfully retrieved the download URL
+                                                    String downloadUrl = uri.toString();
+                                                    System.out.println("Download URL: " + downloadUrl);
+                                                    Map<String, Object> User = new HashMap<>();
+                                                    ArrayList<badgesData> badges = new ArrayList<>();
+                                                    ArrayList<String> employeeIDs = new ArrayList<>();
+                                                    User.put("username", fullName);
+                                                    User.put("profilePhoto", downloadUrl);
+                                                    User.put("title", title);
+                                                    User.put("email", email);
+                                                    if (validEmployerID)
+                                                        User.put("employer", employerID);
+                                                    else
+                                                        User.put("employer", "");
+                                                    User.put("employees", employeeIDs);
+                                                    User.put("work_start", "");
+                                                    User.put("work_end", "");
+                                                    User.put("image_count_today", 0);
+                                                    User.put("image_count_week", 0);
+                                                    User.put("image_count_year", 0);
+                                                    User.put("badges", badges);
+
+                                                    assert user != null;
+                                                    String uid = user.getUid();
+                                                    db.collection("users").document(uid)
+                                                            .set(User)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Log.d(TAG, "Registered User successfully added!");
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Log.w(TAG, "Error writing document", e);
+                                                                }
+                                                            });
+                                                    if (validEmployerID){
+                                                        db.collection("users")
+                                                                .document(employerID)
+                                                                .update("employees", FieldValue.arrayUnion(uid))
+                                                                .addOnSuccessListener(aVoid -> {
+                                                                    // Successfully updated
+                                                                    System.out.println("Employee ID added to the Employer's employee list!");
+                                                                })
+                                                                .addOnFailureListener(e -> {
+                                                                    // Handle the error
+                                                                    System.err.println("Error updating array field: " + e.getMessage());
+                                                                });
+                                                    }
+                                                    Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
                                                 @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.w(TAG, "Error writing document", e);
+                                                public void onFailure(@NonNull Exception exception) {
+                                                    // Handle any errors
+                                                    System.err.println("Error getting download URL: " + exception.getMessage());
                                                 }
                                             });
-                                    if (validEmployerID){
-                                        db.collection("users")
-                                                .document(employerID)
-                                                .update("employees", FieldValue.arrayUnion(uid))
-                                                .addOnSuccessListener(aVoid -> {
-                                                    // Successfully updated
-                                                    System.out.println("Employee ID added to the Employer's employee list!");
-                                                })
-                                                .addOnFailureListener(e -> {
-                                                    // Handle the error
-                                                    System.err.println("Error updating array field: " + e.getMessage());
-                                                });
-                                    }
-                                    Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-                                    startActivity(intent);
-                                    finish();
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
