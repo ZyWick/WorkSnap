@@ -1,5 +1,6 @@
 package com.mobdeve.s15.worksnap;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,12 +40,12 @@ public class PostListFragment extends Fragment {
 
         Log.e("taggg", "" + dayAttendanceDataList);
         postDataList = new ArrayList<>();
-        SimpleDateFormat dayFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dayFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
         for (DayAttendanceData ey : dayAttendanceDataList) {
             for (AttendancePhotoData yo : ey.getAttendancePhotoDataList()) {
                 postDataList.add(new PostData(yo.getUsername(), yo.getLocation(),
-                        dayFormatter.format(yo.getCreated_at()), yo.getImageLink()));
+                        dayFormatter.format(yo.getCreated_at()), yo.getImageLink(), yo.getUser_id(), yo.getImageID().getId()));
             }
         }
 

@@ -3,6 +3,7 @@ package com.mobdeve.s15.worksnap;
 import static android.text.format.DateUtils.isToday;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -37,27 +40,6 @@ public class DayAttendanceAdapter extends RecyclerView.Adapter<DayAttendanceAdap
         this.parentFragment = parentFragment;
     }
 
-    public boolean isToday(Date date1, Date date2) {
-        // Create Calendar instances for both dates
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.setTime(date1);
-
-        Calendar calendar2 = Calendar.getInstance();
-        calendar2.setTime(date2);
-
-        // Get the year, month, and day of each date
-        int year1 = calendar1.get(Calendar.YEAR);
-        int month1 = calendar1.get(Calendar.MONTH);
-        int day1 = calendar1.get(Calendar.DAY_OF_MONTH);
-
-        int year2 = calendar2.get(Calendar.YEAR);
-        int month2 = calendar2.get(Calendar.MONTH);
-        int day2 = calendar2.get(Calendar.DAY_OF_MONTH);
-
-        // Compare the year, month, and day values
-        return year1 == year2 && month1 == month2 && day1 == day2;
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -67,20 +49,38 @@ public class DayAttendanceAdapter extends RecyclerView.Adapter<DayAttendanceAdap
         return viewHolder;
     }
 
+    public String getDayOfWeek (String groupDate) {
+        String[] parts = groupDate.split("-");
+        int year = Integer.parseInt(parts[0]);  // Year
+        int month = Integer.parseInt(parts[1]); // Month
+        int day = Integer.parseInt(parts[2]);   // Day
+
+        // Adjust for January and February
+        if (month < 3) {
+            month += 12;
+            year--;
+        }
+
+        // Apply Zeller's Congruence formula
+        int h = (day + (13 * (month + 1)) / 5 + year + year / 4 + 6 * (year / 100) + year / 400) % 7;
+
+        // Map the result to the day of the week (0 = Saturday, 1 = Sunday, ..., 6 = Friday)
+        String[] daysOfWeek = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+
+        // Print the corresponding day of the week
+        return daysOfWeek[h];
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final DayAttendanceData theDayAttendanceData = DayAttendanceData.get(position);
 
-//        Date date = theDayAttendanceData.getDate().toDate();
-//        SimpleDateFormat sdf = new SimpleDateFormat("MM / dd / yy", Locale.getDefault());
-        holder.dayDate.setText(theDayAttendanceData.getDate());
+        String thedate = theDayAttendanceData.getDate();
+        holder.dayDate.setText(thedate);
 
-//        if (isToday(date, Timestamp.now().toDate())) holder.dayText.setText("Today");
-//        else {
-//            sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
-//            holder.dayText.setText(sdf.format(date));
-//        }
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (thedate.equals(sdf.format(new Date()))) holder.dayText.setText("Today");
+        else holder.dayText.setText(getDayOfWeek(thedate));
 
         holder.photosRecycler.setHasFixedSize(true);
         holder.photosRecycler.setLayoutManager(new GridLayoutManager(context, 3));

@@ -81,8 +81,8 @@ public class AllEmployee extends Fragment {
         }
     }
 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference usersRef = db.collection(MyFirestoreReferences.USERS_COLLECTION);
+    FirebaseFirestore db;
+    CollectionReference usersRef ;
 
     public interface OnEmployeeIDsFetchedListener {
         void onSuccess(ArrayList<String> employeeeeeeeIDs);
@@ -127,6 +127,10 @@ public class AllEmployee extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        db = FirebaseFirestore.getInstance();
+        usersRef = db.collection(MyFirestoreReferences.USERS_COLLECTION);
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_all_employee, container, false);
 
@@ -163,7 +167,6 @@ public class AllEmployee extends Fragment {
 //
                                 QuerySnapshot querySnapshot = task.getResult();
                                 if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                                    Log.e(TAG, "Employee412323 Name:" + getResources().getString(R.string.hello_blank_fragment));
                                     for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                                         // Safely retrieve the "name" and "position" fields
                                         String name = document.getString("username");
@@ -171,7 +174,7 @@ public class AllEmployee extends Fragment {
 
                                         // Add employee data to the list
                                         EmployeeDataList.add(new EmployeeData(name, pic, document.getId()));
-                                        Log.e(TAG, "Employee Name: " + name + ", Position: " + document);
+//                                        Log.e(TAG, "Employee Name: " + name + ", Position: " + document);
                                     }
 
                                     // Initialize the adapter after data is fetched

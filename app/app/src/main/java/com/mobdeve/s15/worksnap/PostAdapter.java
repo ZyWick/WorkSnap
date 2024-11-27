@@ -60,6 +60,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             PostImageDialogFragment dialogFragment = PostImageDialogFragment.newInstance(post.getPictureResId());
             dialogFragment.show(((AppCompatActivity) context).getSupportFragmentManager(), "post_image_dialog");
         });
+
+        holder.btnVerify.setOnClickListener(v->{
+            String hello = post.getImageID();
+        });
+
+        holder.btnWrong.setOnClickListener(v->{
+
+        });
     }
 
     @Override

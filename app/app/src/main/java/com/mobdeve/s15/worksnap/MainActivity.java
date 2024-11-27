@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new leaderboard());
+        replaceFragment(new checkEmployees());
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
