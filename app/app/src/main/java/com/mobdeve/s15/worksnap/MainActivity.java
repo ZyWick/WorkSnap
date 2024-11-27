@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mobdeve.s15.worksnap.databinding.ActivityMainBinding;
 
 import java.util.List;
@@ -87,7 +89,11 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.LeaderboardMenu) {
                 replaceFragment(new leaderboard());
             } else if (itemId == R.id.ProfileMenu) {
-                replaceFragment(new profile());
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (currentUser != null) {
+                    String uid = currentUser.getUid();
+                    replaceFragment(profile.newInstance(uid));
+                }
             } else if (itemId == R.id.allEmployeesMenu) {
                 replaceFragment(new AllEmployee());
             } else if (itemId == R.id.checkEmployeeMenu) {
