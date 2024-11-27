@@ -209,7 +209,7 @@ public class profile extends Fragment {
                     // This shit is for the progress bar No clue what that total is supposed to be so its week /7 for now
                     if (imageCountWeek != null) {
 
-                        int progress = (int) ((imageCountWeek / ((dayOfWeek-1) * 5)) * 100);
+                        int progress = (int) ((imageCountWeek / (double)((dayOfWeek-1) * 5)) * 100);
                         if (progressBar != null) {
                             progressBar.setProgress(progress, true);
                         }
