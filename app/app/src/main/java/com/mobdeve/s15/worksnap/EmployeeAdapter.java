@@ -60,8 +60,8 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
             // Load image into ImageView using Glide
             Glide.with(context)
                     .load(imageUrl)
-                    .placeholder(R.drawable.danda) // Optional: Add a placeholder image
-                    .error(R.drawable.momo)       // Optional: Add an error image
+                    .placeholder(R.drawable.danda1) // Optional: Add a placeholder image
+                    .error(R.drawable.danda1)       // Optional: Add an error image// Optional: Add an error image
                     .into(holder.employeeProfile);
         } else {
             // Handle missing URL

@@ -32,6 +32,8 @@ public class MyPhotoAdapter extends RecyclerView.Adapter<MyPhotoAdapter.ViewHold
         if (context != null && photoData.getImageUrl() != null && holder.attendanceImage != null) {
             Glide.with(context)
                     .load(photoData.getImageUrl())
+                    .placeholder(R.drawable.danda1) // Optional: Add a placeholder image
+                    .error(R.drawable.danda1)       // Optional: Add an error image
                     .into(holder.attendanceImage);
         } else {
             Log.e("MyPhotoAdapter", "Context, imageUrl, or attendanceImage is null");

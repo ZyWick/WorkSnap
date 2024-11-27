@@ -38,8 +38,8 @@ public class LB_RecyclerViewAdapter extends RecyclerView.Adapter<LB_RecyclerView
             // Load image into ImageView using Glide
             Glide.with(holder.itemView.getContext())
                     .load(imageUrl)
-                    .placeholder(R.drawable.danda) // Optional: Add a placeholder image
-                    .error(R.drawable.momo)       // Optional: Add an error image
+                    .placeholder(R.drawable.danda1) // Optional: Add a placeholder image
+                    .error(R.drawable.danda1)       // Optional: Add an error image// Optional: Add an error image
                     .into(holder.employeeImageView);
         } else {
             // Handle missing URL

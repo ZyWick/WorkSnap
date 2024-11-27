@@ -45,8 +45,8 @@ public class PostImageDialogFragment extends DialogFragment {
                 // Load image into ImageView using Glide
                 Glide.with(requireContext())
                         .load(imageResId)
-                        .placeholder(R.drawable.danda) // Optional: Add a placeholder image
-                        .error(R.drawable.momo)       // Optional: Add an error image
+                        .placeholder(R.drawable.danda1) // Optional: Add a placeholder image
+                        .error(R.drawable.danda1)       // Optional: Add an error image     // Optional: Add an error image
                         .into(imageView);
             } else {
                 // Handle missing URL
