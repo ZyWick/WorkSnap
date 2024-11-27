@@ -12,7 +12,6 @@ activity = "1.9.2"
 constraintlayout = "2.1.4"
 protoliteWellKnownTypes = "18.0.0"
 firebaseCommon = "21.0.0"
-firebaseFirestore = "25.1.1"
 firebaseAuth = "23.1.0"
 playServicesLocation = "21.3.0"
 firebaseStorage = "21.0.1"
@@ -23,6 +22,7 @@ compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compi
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 glide-v4142 = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
+firebaseFirestore = "25.1.1"
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -32,12 +32,12 @@ activity = { group = "androidx.activity", name = "activity", version.ref = "acti
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 protolite-well-known-types = { group = "com.google.firebase", name = "protolite-well-known-types", version.ref = "protoliteWellKnownTypes" }
 firebase-common = { group = "com.google.firebase", name = "firebase-common", version.ref = "firebaseCommon" }
-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 #noinspection SimilarGradleDependency
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

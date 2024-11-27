@@ -11,6 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import android.util.Log;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,13 +29,18 @@ public class leaderboard extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser user = mAuth.getCurrentUser();
+    String uid = user.getUid();
 
+    private LB_RecyclerViewAdapter adapter;
     ArrayList<leaderboardModel> leaderboardModels = new ArrayList<>();
-    int [] employeeImages = {R.drawable.danda};
+    int[] employeeImages = {R.drawable.danda};
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
 
     public leaderboard() {
         // Required empty public constructor
@@ -70,22 +80,86 @@ public class leaderboard extends Fragment {
         View view = inflater.inflate(R.layout.fragment_leaderboard, container, false);
 
         RecyclerView recyclerView = view.findViewById(R.id.leaderboardRecyclerView);
-        setLeaderboardModels();
 
-        LB_RecyclerViewAdapter adapter = new LB_RecyclerViewAdapter(leaderboardModels);
+
+        adapter = new LB_RecyclerViewAdapter(leaderboardModels);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        setLeaderboardModels();
         return view;
     }
 
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private void setLeaderboardModels(){
-        int[] defaultBadges = {R.drawable.crown, R.drawable.crown, R.drawable.crown};
+    private void setLeaderboardModels() {
+        db.collection("users").document(uid)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        // Step 2: Check if the user has an employer
+                        String employerUid = task.getResult().getString("employer");
+                        if (employerUid != null && !employerUid.isEmpty()) {
+                            // User is an employee, fetch the employer's document
+                            fetchEmployerEmployees(employerUid);
+                        } else {
+                            Log.d("FirestoreInfo", "User does not have an employer assigned.");
+                        }
+                    } else {
+                        Log.e("FirestoreError", "Failed to fetch user data", task.getException());
+                    }
+                });
+    }
 
-        for (int i = 0; i < 45; i++){
-            String employeeName = "Full Name" + (i+1);
-            leaderboardModels.add(new leaderboardModel(defaultBadges, R.drawable.danda, i, employeeName));
+    private void fetchEmployerEmployees(String employerUid) {
+        // Step 3: Fetch the employer's document to get the list of employees
+        db.collection("users").document(employerUid)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        ArrayList<String> employeeUids = (ArrayList<String>) task.getResult().get("employees");
+                        if (employeeUids != null && !employeeUids.isEmpty()) {
+                            fetchEmployees(employeeUids); // Fetch details for each employee
+                        } else {
+                            Log.d("FirestoreInfo", "Employer does not have any employees.");
+                        }
+                    } else {
+                        Log.e("FirestoreError", "Failed to fetch employer data", task.getException());
+                    }
+                });
+    }
+
+    private void fetchEmployees(ArrayList<String> employeeUids) {
+        leaderboardModels.clear(); // Clear any existing leaderboard data
+        for (String employeeUid : employeeUids) {
+            db.collection("users").document(employeeUid)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            // Extract employee details
+                            String employeeName = task.getResult().getString("username");
+                            Long imageCountLong = task.getResult().getLong("image_count_today");
+                            int imageCount = (imageCountLong != null) ? imageCountLong.intValue() : 0; // Default to 0 if null
+//                            int imageCount = task.getResult().getLong("image_count_today").intValue();
+                            int[] badges = {
+                                    R.drawable.crown, // Example badge
+                                    R.drawable.crown,
+                                    R.drawable.crown
+                            };
+                            String profilePhotoPath = task.getResult().getString("profilePhoto");
+
+                            // Add employee data to the leaderboard list
+                            leaderboardModels.add(new leaderboardModel(
+                                    badges,
+                                    R.drawable.danda, // Replace with dynamic logic if necessary
+                                    imageCount,
+                                    employeeName
+                            ));
+                            adapter.notifyDataSetChanged(); // Notify adapter of changes
+                        } else {
+                            Log.e("FirestoreError", "Failed to fetch employee data", task.getException());
+                        }
+                    });
         }
     }
 }
