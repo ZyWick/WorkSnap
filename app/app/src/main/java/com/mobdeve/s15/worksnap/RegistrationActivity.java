@@ -203,4 +203,5 @@ public class RegistrationActivity extends AppCompatActivity {
         employerID.setVisibility(View.GONE);
         employerIDInput.setVisibility(View.GONE);
     }
+
 }
