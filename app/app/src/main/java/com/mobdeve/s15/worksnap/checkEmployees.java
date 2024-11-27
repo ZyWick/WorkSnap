@@ -83,23 +83,28 @@ public class checkEmployees extends Fragment {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference usersRef = db.collection(MyFirestoreReferences.USERS_COLLECTION);
+    CollectionReference imagesRef = db.collection(MyFirestoreReferences.IMAGES_COLLECTION);
 
-    public interface OnEmployeeIDsFetchedListener {
+    public interface HereOnEmployeeIDsFetchedListener {
         void onSuccess(ArrayList<String> employeeeeeeeIDs);
 
         void onFailure(Exception e);
     }
 
-    public void getEmployeeIDs(String userID, AllEmployee.OnEmployeeIDsFetchedListener listener) {
+    public void getEmployeeIDs(String userID, HereOnEmployeeIDsFetchedListener listener) {
         DocumentReference docRef = usersRef.document(userID);
-
+        Log.e(TAG, "Employee412323 Name111111111111:" + userID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                Log.e(TAG, "Employee412323 Name:2222222222222222" + getResources().getString(R.string.hello_blank_fragment));
                 if (task.isSuccessful()) {
+                    Log.e(TAG, "Employee412323 Name:2222222222222222" + getResources().getString(R.string.hello_blank_fragment));
                     DocumentSnapshot document = task.getResult();
+                    Log.e(TAG, "Employee412323 Name:2222222222222222" + getResources().getString(R.string.hello_blank_fragment));
                     if (document.exists()) {
                         try {
+                            Log.e(TAG, "Employee412323 Name:2222222222222222" + getResources().getString(R.string.hello_blank_fragment));
                             // Safely retrieve the list of employee IDs
                             List<String> employees = (List<String>) document.getData().get("employees");
                             if (employees != null) {
@@ -135,13 +140,13 @@ public class checkEmployees extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.dayAttendanceRecycler);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        getEmployeeIDs("T0l1ar5QuLbT8c42wWwp3dTCiay2", new AllEmployee.OnEmployeeIDsFetchedListener() {
+        Log.e(TAG, "Employee412323 Nadasdme:" + getResources().getString(R.string.hello_blank_fragment));
+        getEmployeeIDs("AKDCcjF5NOhBu9vKpLenIGQhfO02", new HereOnEmployeeIDsFetchedListener() {
             @Override
             public void onSuccess(ArrayList<String> employeeIDs) {
                 if (!employeeIDs.isEmpty()) {
                     // Query to fetch employee data based on IDs
-                    Query uncheckedPhotosQuery = usersRef.whereIn(FieldPath.documentId(), employeeIDs);
+                    Query uncheckedPhotosQuery = imagesRef.whereIn("user_id", employeeIDs).whereEqualTo("rejected", false).whereEqualTo("verified", false);;
 
                     uncheckedPhotosQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -149,10 +154,19 @@ public class checkEmployees extends Fragment {
                             if (task.isSuccessful()) {
                                 QuerySnapshot querySnapshot = task.getResult();
                                 if (querySnapshot != null && !querySnapshot.isEmpty()) {
-
+                                    Log.e(TAG, "Employee412323 Name:" + getResources().getString(R.string.hello_blank_fragment));
+                                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                                        // Safely retrieve the "name" and "position" fields
+//                                        String name = document.getString("username");
+//                                        String pic = document.getString("profilePhoto");
+//
+//                                        // Add employee data to the list
+//                                        EmployeeDataList.add(new EmployeeData(name, pic, document.getId()));
+                                        Log.e(TAG, "gello" + document);
+                                    }
                                     // Initialize the adapter after data is fetched
-                                    EmployeeAdapter employeeAdapter = new EmployeeAdapter(EmployeeDataList, (MainActivity) getActivity(), getParentFragmentManager());
-                                    recyclerView.setAdapter(employeeAdapter);
+//                                    EmployeeAdapter employeeAdapter = new EmployeeAdapter(EmployeeDataList, (MainActivity) getActivity(), getParentFragmentManager());
+//                                    recyclerView.setAdapter(employeeAdapter);
                                 } else {
                                     Log.d(TAG, "No documents found");
                                 }

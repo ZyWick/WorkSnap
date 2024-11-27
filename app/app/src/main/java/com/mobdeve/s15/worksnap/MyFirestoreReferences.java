@@ -5,7 +5,7 @@ public class MyFirestoreReferences {
     // Collections
     public static final String
             BADGES_COLLECTION = "Badges",
-            ATTENDANCE_PHOTOS_COLLECTION = "AttendancePhotos",
+            IMAGES_COLLECTION = "images",
             USERS_COLLECTION = "users";
 
     // BadgesData fields

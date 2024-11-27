@@ -327,20 +327,21 @@ public class CameraView extends AppCompatActivity {
                 if (address != null) {
                     // 4. Convert the image to a Base64 string
                     String base64Image = bitmapToBase64(bitmap);
-
+                    Log.e("taggg", "Employee Namehgeree: ");
                     // 5. Prepare the data for Firestore
                     Map<String, Object> imageData = new HashMap<>();
                     imageData.put("user_id", uid);
-                    imageData.put("imageBase64", base64Image);
+                    imageData.put("imageBase64", "tffff");
                     imageData.put("location", address);
                     imageData.put("created_at", System.currentTimeMillis());
                     imageData.put("verified" ,false);
                     imageData.put("rejected", false);
-
+//                    Log.e("taggg", base64Image);
                     // 6. Upload the data to Firestore
                     db.collection("images").document(imageId).set(imageData)
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
+                                    Log.e("taggg", "Employee Namehgeree: 2132");
                                     Toast.makeText(getApplicationContext(), "Image uploaded with address!", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Failed to upload: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

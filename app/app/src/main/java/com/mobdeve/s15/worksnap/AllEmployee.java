@@ -140,7 +140,7 @@ public class AllEmployee extends Fragment {
         // Initialize the list of Employee Data
         ArrayList<EmployeeData> EmployeeDataList = new ArrayList<>();
 
-        getEmployeeIDs("T0l1ar5QuLbT8c42wWwp3dTCiay2", new OnEmployeeIDsFetchedListener() {
+        getEmployeeIDs("AKDCcjF5NOhBu9vKpLenIGQhfO02", new OnEmployeeIDsFetchedListener() {
             @Override
             public void onSuccess(ArrayList<String> employeeIDs) {
                 if (!employeeIDs.isEmpty()) {
@@ -163,7 +163,7 @@ public class AllEmployee extends Fragment {
 //
                                 QuerySnapshot querySnapshot = task.getResult();
                                 if (querySnapshot != null && !querySnapshot.isEmpty()) {
-
+                                    Log.e(TAG, "Employee412323 Name:" + getResources().getString(R.string.hello_blank_fragment));
                                     for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                                         // Safely retrieve the "name" and "position" fields
                                         String name = document.getString("username");

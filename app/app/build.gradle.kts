@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation (libs.glide.v4142)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.appcompat)

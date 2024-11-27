@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHolder> {
 
     ArrayList<EmployeeData> EmployeeData;
@@ -49,12 +50,20 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.ViewHo
         final EmployeeData theEmployeeData = EmployeeData.get(position);
         holder.employeeName.setText(theEmployeeData.getEmployeeName());
 
-        byte[] decodedBytes = Base64.decode(theEmployeeData.getEmployeeImage(), Base64.DEFAULT);
 
-        // Convert byte array to Bitmap
-        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        String imageUrl = theEmployeeData.getEmployeeImage();
 
-        holder.employeeProfile.setImageBitmap(bitmap);
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            // Load image into ImageView using Glide
+            glide.with(context)
+                    .load(imageUrl)
+                    .placeholder("https://firebasestorage.googleapis.com/v0/b/worksnap-9bdb3.firebasestorage.app/o/images%2F20b6e58c-40bb-40b7-9530-84ac1540efde.jpg?alt=media&token=1db735be-2832-4f71-aa8c-42a30c877f46") // Optional: Add a placeholder image
+                    .error("https://firebasestorage.googleapis.com/v0/b/worksnap-9bdb3.firebasestorage.app/o/images%2F20b6e58c-40bb-40b7-9530-84ac1540efde.jpg?alt=media&token=1db735be-2832-4f71-aa8c-42a30c877f46")       // Optional: Add an error image
+                    .into(holder.employeeProfile);
+        } else {
+            // Handle missing URL
+            System.out.println("Image URL is empty!");
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
