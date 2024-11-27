@@ -84,9 +84,6 @@ public class AllEmployee extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference usersRef = db.collection(MyFirestoreReferences.USERS_COLLECTION);
 
-    ArrayList<String> employeeIDs = new ArrayList<String>();
-
-
     public interface OnEmployeeIDsFetchedListener {
         void onSuccess(ArrayList<String> employeeeeeeeIDs);
 
