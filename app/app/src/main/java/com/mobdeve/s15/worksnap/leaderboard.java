@@ -138,7 +138,9 @@ public class leaderboard extends Fragment {
                         if (task.isSuccessful() && task.getResult() != null) {
                             // Extract employee details
                             String employeeName = task.getResult().getString("username");
-                            int imageCount = task.getResult().getLong("image_count_today").intValue();
+                            Long imageCountLong = task.getResult().getLong("image_count_today");
+                            int imageCount = (imageCountLong != null) ? imageCountLong.intValue() : 0; // Default to 0 if null
+//                            int imageCount = task.getResult().getLong("image_count_today").intValue();
                             int[] badges = {
                                     R.drawable.crown, // Example badge
                                     R.drawable.crown,
