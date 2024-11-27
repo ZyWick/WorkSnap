@@ -81,10 +81,10 @@
 
             <!-- Monthly Tab -->
             <TextView
-                android:id="@+id/tab_monthly"
+                android:id="@+id/tab_yearly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Monthly"
+                android:text="Yearly"
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray"
                 android:clickable="true"

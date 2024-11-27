@@ -4,16 +4,45 @@ import java.util.ArrayList;
 
 public class leaderboardModel {
     private String employeeName;
-    private int employeeID;
     private int[] badges;
-    private Integer employeeImage;
+    private String profilePhotoPath;
+
+    public int getImageCountDaily() {
+        return imageCountDaily;
+    }
+
+    public void setImageCountDaily(int imageCountDaily) {
+        this.imageCountDaily = imageCountDaily;
+    }
+
+    public int getImageCountWeekly() {
+        return imageCountWeekly;
+    }
+
+    public void setImageCountWeekly(int imageCountWeekly) {
+        this.imageCountWeekly = imageCountWeekly;
+    }
+
+    public int getImageCountYearly() {
+        return imageCountYearly;
+    }
+
+    public void setImageCountYearly(int imageCountYearly) {
+        this.imageCountYearly = imageCountYearly;
+    }
+
+    private int imageCountDaily;
+    private int imageCountWeekly;
+    private int imageCountYearly;
 
 
-    public leaderboardModel(int[] badges, Integer employeeImage, int employeeID, String employeeName) {
+    public leaderboardModel(int[] badges, String profilePhotoPath, int imageCountDaily, int imageCountWeekly, int imageCountYearly,String employeeName) {
         this.badges = badges;
-        this.employeeImage = employeeImage;
-        this.employeeID = employeeID;
+        this.profilePhotoPath = profilePhotoPath;
         this.employeeName = employeeName;
+        this.imageCountDaily = imageCountDaily;
+        this.imageCountWeekly = imageCountWeekly;
+        this.imageCountYearly = imageCountYearly;
     }
 
     public String getEmployeeName() {
@@ -23,25 +52,14 @@ public class leaderboardModel {
     public void setEmployeeName(String employeeName) {
         this.employeeName = employeeName;
     }
-
-    public Integer getEmployeeImage() {
-        return employeeImage;
-    }
-
     public int[] getBadges() {
         return badges;
     }
-
-    public void setEmployeeImage(Integer employeeImage) {
-        this.employeeImage = employeeImage;
+    public String getProfilePhotoPath() {
+        return profilePhotoPath;
     }
 
-
-    public int getEmployeeID() {
-        return employeeID;
-    }
-
-    public void setEmployeeID(int employeeID) {
-        this.employeeID = employeeID;
+    public void setProfilePhotoPath(String profilePhotoPath) {
+        this.profilePhotoPath = profilePhotoPath;
     }
 }

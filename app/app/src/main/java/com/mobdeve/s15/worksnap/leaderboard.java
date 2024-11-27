@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import android.util.Log;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,6 +87,15 @@ public class leaderboard extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        TextView tabDaily = view.findViewById(R.id.tab_daily);
+        TextView tabWeekly = view.findViewById(R.id.tab_weekly);
+        TextView tabMonthly = view.findViewById(R.id.tab_yearly);
+
+        // Set click listeners for tabs
+        tabDaily.setOnClickListener(v -> sortLeaderboard("daily"));
+        tabWeekly.setOnClickListener(v -> sortLeaderboard("weekly"));
+        tabMonthly.setOnClickListener(v -> sortLeaderboard("yearly"));
+
         setLeaderboardModels();
         return view;
     }
@@ -136,23 +146,41 @@ public class leaderboard extends Fragment {
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful() && task.getResult() != null) {
+
+                            Long imageCountDailyLong = task.getResult().getLong("image_count_today");
+                            int imageCountDaily = (imageCountDailyLong != null) ? imageCountDailyLong.intValue() : 0;
+
+                            Long imageCountWeeklyLong = task.getResult().getLong("image_count_week");
+                            int imageCountWeekly = (imageCountWeeklyLong != null) ? imageCountWeeklyLong.intValue() : 0;
+
+                            Long imageCountYearlyLong = task.getResult().getLong("image_count_year");
+                            int imageCountYearly = (imageCountYearlyLong != null) ? imageCountYearlyLong.intValue() : 0;
+
                             // Extract employee details
                             String employeeName = task.getResult().getString("username");
-                            Long imageCountLong = task.getResult().getLong("image_count_today");
-                            int imageCount = (imageCountLong != null) ? imageCountLong.intValue() : 0; // Default to 0 if null
-//                            int imageCount = task.getResult().getLong("image_count_today").intValue();
+
+
+                            String profilePhotoPath = task.getResult().getString("profilePhoto");
+                            if (profilePhotoPath == null || profilePhotoPath.isEmpty()) {
+                                // Fallback to a default image URL or keep it null for Glide to handle
+                                profilePhotoPath = null; // Glide can handle null by showing placeholder
+                            }
+
+                            Log.d("FirestoreDebug", "Employee: " + employeeName + ", Profile Photo Path: " + profilePhotoPath);
+
                             int[] badges = {
                                     R.drawable.crown, // Example badge
                                     R.drawable.crown,
                                     R.drawable.crown
                             };
-                            String profilePhotoPath = task.getResult().getString("profilePhoto");
 
                             // Add employee data to the leaderboard list
                             leaderboardModels.add(new leaderboardModel(
                                     badges,
-                                    R.drawable.danda, // Replace with dynamic logic if necessary
-                                    imageCount,
+                                    profilePhotoPath,
+                                    imageCountDaily,
+                                    imageCountWeekly,
+                                    imageCountYearly,
                                     employeeName
                             ));
                             adapter.notifyDataSetChanged(); // Notify adapter of changes
@@ -161,5 +189,25 @@ public class leaderboard extends Fragment {
                         }
                     });
         }
+    }
+
+    private void sortLeaderboard(String criteria) {
+        //Testing purposes
+//        Log.d("LeaderboardDebug", "Sorting leaderboard by: " + criteria);
+//        for (leaderboardModel model : leaderboardModels) {
+//            Log.d("LeaderboardDebug", "Image Count Daily: " + model.getImageCountDaily() + ", Weekly: " + model.getImageCountWeekly() + ", Yearly: " + model.getImageCountYearly());
+//        }
+        switch (criteria) {
+            case "daily":
+                leaderboardModels.sort((o1, o2) -> Integer.compare(o2.getImageCountDaily(), o1.getImageCountDaily()));
+                break;
+            case "weekly":
+                leaderboardModels.sort((o1, o2) -> Integer.compare(o2.getImageCountWeekly(), o1.getImageCountWeekly()));
+                break;
+            case "yearly":
+                leaderboardModels.sort((o1, o2) -> Integer.compare(o2.getImageCountYearly(), o1.getImageCountYearly()));
+                break;
+        }
+        adapter.notifyDataSetChanged(); // Refresh RecyclerView
     }
 }
