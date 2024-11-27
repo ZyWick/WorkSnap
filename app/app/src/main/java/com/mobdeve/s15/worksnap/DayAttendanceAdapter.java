@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,11 +27,14 @@ public class DayAttendanceAdapter extends RecyclerView.Adapter<DayAttendanceAdap
 
     ArrayList<DayAttendanceData> DayAttendanceData;
     Context context;
+    Fragment parentFragment;
+
     private FragmentManager fragmentManager;
-    public DayAttendanceAdapter(ArrayList<DayAttendanceData> DayAttendanceData, MainActivity activity, FragmentManager fragmentManager) {
+    public DayAttendanceAdapter(ArrayList<DayAttendanceData> DayAttendanceData, MainActivity activity, FragmentManager fragmentManager, Fragment parentFragment) {
         this.DayAttendanceData = DayAttendanceData;
         this.context = activity;
         this.fragmentManager = fragmentManager;
+        this.parentFragment = parentFragment;
     }
 
     public boolean isToday(Date date1, Date date2) {
@@ -82,7 +86,7 @@ public class DayAttendanceAdapter extends RecyclerView.Adapter<DayAttendanceAdap
         holder.photosRecycler.setLayoutManager(new GridLayoutManager(context, 3));
         holder.photosRecycler.setAdapter(
                 new DayAttendancePhotosAdapter(theDayAttendanceData.getAttendancePhotoDataList(),
-                        (MainActivity) context, fragmentManager)
+                        (MainActivity) context, fragmentManager, parentFragment)
         );
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

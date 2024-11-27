@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
@@ -38,7 +40,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.fullName.setText(post.getFullName());
         holder.location.setText(post.getLocation());
         holder.dateTime.setText(post.getDateTime());
-        holder.picture.setImageResource(post.getPictureResId());
+
+        String imageUrl = post.getPictureResId();
+
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            // Load image into ImageView using Glide
+            Glide.with(context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.danda) // Optional: Add a placeholder image
+                    .error(R.drawable.momo)       // Optional: Add an error image
+                    .into(holder.picture);
+        } else {
+            // Handle missing URL
+            System.out.println("Image URL is empty!");
+        }
 
         // Set up click listener for the picture
         holder.picture.setOnClickListener(v -> {

@@ -55,12 +55,13 @@ public class checkEmployees extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private ArrayList<DayAttendanceData> DayAttendanceList = new ArrayList<DayAttendanceData>();
+    public ArrayList<DayAttendanceData> DayAttendanceList = new ArrayList<DayAttendanceData>();
     private DayAttendanceAdapter DayAttendanceAdapter;
 
     public checkEmployees() {
         // Required empty public constructor
     }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -159,12 +160,18 @@ public class checkEmployees extends Fragment {
         return dayAttendanceDataList;
     }
 
+    public void setDayAttendanceList(ArrayList<DayAttendanceData> dayAttendanceList) {
+        this.DayAttendanceList = dayAttendanceList;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_check_employees, container, false);
         view.findViewById(R.id.selectDate).setOnClickListener(this::selectTheDate);
+
+        Fragment fukment = this;
 
         // Initialize RecyclerView
         RecyclerView recyclerView = view.findViewById(R.id.dayAttendanceRecycler);
@@ -188,16 +195,16 @@ public class checkEmployees extends Fragment {
                                     for (QueryDocumentSnapshot document : task.getResult())
                                         a.add(document.toObject(AttendancePhotoData.class));
 
-                                    ArrayList<DayAttendanceData> groupedData = groupByDay(a);
+                                    DayAttendanceList = groupByDay(a);
 
-                                    groupedData.sort(new Comparator<DayAttendanceData>() {
+                                    DayAttendanceList.sort(new Comparator<DayAttendanceData>() {
                                         @Override
                                         public int compare(DayAttendanceData o1, DayAttendanceData o2) {
                                             return o1.getDate().compareTo(o2.getDate()); // Descending order
                                         }
                                     });
 
-                                    DayAttendanceAdapter = new DayAttendanceAdapter(groupedData, (MainActivity) getActivity(),  getParentFragmentManager());
+                                    DayAttendanceAdapter = new DayAttendanceAdapter(DayAttendanceList, (MainActivity) getActivity(),  getParentFragmentManager(), fukment);
                                     recyclerView.setAdapter(DayAttendanceAdapter);
 
                                     // Initialize the adapter after data is fetched
@@ -238,6 +245,11 @@ public class checkEmployees extends Fragment {
     public void selectTheDate (View v) {
         DialogFragment datePicker = new DatePickerFragment();
         datePicker.show(getParentFragmentManager(), "datePicker");
+    }
+
+
+    public ArrayList<DayAttendanceData> getDayAttendanceList() {
+        return this.DayAttendanceList;
     }
 }
 

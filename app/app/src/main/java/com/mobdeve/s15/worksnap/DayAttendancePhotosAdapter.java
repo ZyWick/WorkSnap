@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 
@@ -22,11 +23,13 @@ public class DayAttendancePhotosAdapter extends RecyclerView.Adapter<DayAttendan
     Context context;
 
     private FragmentManager fragmentManager;
+    Fragment parentFragment;
 
-    public DayAttendancePhotosAdapter(ArrayList<AttendancePhotoData> AttendancePhotoData, MainActivity activity, FragmentManager fragmentManager) {
+    public DayAttendancePhotosAdapter(ArrayList<AttendancePhotoData> AttendancePhotoData, MainActivity activity, FragmentManager fragmentManager, Fragment parentFragment) {
         this.AttendancePhotoData = AttendancePhotoData;
         this.context = activity;
         this.fragmentManager = fragmentManager;
+        this.parentFragment = parentFragment;
     }
 
     @NonNull
@@ -61,13 +64,16 @@ public class DayAttendancePhotosAdapter extends RecyclerView.Adapter<DayAttendan
             @Override
             public void onClick(View v) {
                 /* Remove this and replace it with an intent call*/
-                Fragment newFragment = new PostListFragment(); // Replace with your fragment class
+                    // Create the fragment
+                PostListFragment newFragment = new PostListFragment();
+                newFragment.setDayAttendanceList(((checkEmployees) parentFragment).getDayAttendanceList());
 
                 // Begin the fragment transaction
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.frameLayoutt, newFragment); // R.id.frameLayoutt is your container
                 fragmentTransaction.addToBackStack(null); // Optionally add to back stack
                 fragmentTransaction.commit();
+
             }
         });
     }

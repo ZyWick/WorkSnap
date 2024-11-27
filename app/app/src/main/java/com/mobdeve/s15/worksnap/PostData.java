@@ -5,9 +5,9 @@ public class PostData {
     private String fullName;
     private String location;
     private String dateTime;
-    private int pictureResId;
+    private String pictureResId;
 
-    public PostData(String fullName, String location, String dateTime, int pictureResId) {
+    public PostData(String fullName, String location, String dateTime, String pictureResId) {
         this.fullName = fullName;
         this.location = location;
         this.dateTime = dateTime;
@@ -26,7 +26,7 @@ public class PostData {
         return dateTime;
     }
 
-    public int getPictureResId() {
+    public String getPictureResId() {
         return pictureResId;
     }
 }

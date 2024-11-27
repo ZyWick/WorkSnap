@@ -11,7 +11,7 @@ public class AttendancePhotoData {
 
     @DocumentId
     private DocumentReference imageID;
-//    private String employeeName;
+    private String username;
     private String user_id;
     private String imageLink;
     private @ServerTimestamp Date created_at;
@@ -20,11 +20,11 @@ public class AttendancePhotoData {
     private boolean verified;
     private boolean rejected;
 
-    public AttendancePhotoData(DocumentReference imageID, String employeeName, String user_id,
+    public AttendancePhotoData(DocumentReference imageID, String username, String user_id,
                                String imageLink, Date created_at, String location,
                                boolean verified, boolean rejected) {
         this.imageID = imageID;
-//        this.employeeName = employeeName;
+        this.username = username;
         this.user_id = user_id;
         this.imageLink = imageLink;
         this.created_at = created_at;
@@ -51,13 +51,13 @@ public class AttendancePhotoData {
         this.imageID = imageID;
     }
 
-//    public String getEmployeeName() {
-//        return employeeName;
-//    }
-//
-//    public void setEmployeeName(String employeeName) {
-//        this.employeeName = employeeName;
-//    }
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getUser_id() {
         return user_id;
