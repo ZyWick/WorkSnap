@@ -66,11 +66,11 @@ public class MainActivity extends AppCompatActivity {
                         } else if (isEmployer) {
                             bottomNavigationView.getMenu().clear();
                             bottomNavigationView.inflateMenu(R.menu.menu_b);
-                            replaceFragment(new checkEmployees());
+                            replaceFragment(new AllEmployee());
                         } else if (isEmployee) {
                             bottomNavigationView.getMenu().clear();
                             bottomNavigationView.inflateMenu(R.menu.menu_c);
-                            replaceFragment(new leaderboard());
+                            replaceFragment(new settings());
                         }
 
                     } else {

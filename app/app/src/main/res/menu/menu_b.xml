@@ -2,9 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <item android:id="@+id/ProfileMenu"
-        android:icon="@drawable/nav_profile"
-        android:title="Profile"/>
     <item android:id="@+id/allEmployeesMenu"
         android:icon="@drawable/nav_allemployees"
         android:title="allEmployees"/>

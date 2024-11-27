@@ -57,7 +57,6 @@
         android:background="@drawable/nav_top_outline"
         android:paddingTop="2dp"
         app:itemActiveIndicatorStyle="@style/ShapeAppearance.Material3.Corner.None"
-        app:itemRippleColor="@null"
-        app:menu="@menu/employer_bottom_nav_menu" />
+        app:itemRippleColor="@null" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
