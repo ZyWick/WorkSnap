@@ -52,6 +52,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -325,48 +328,48 @@ public class CameraView extends AppCompatActivity {
                 String address = getAddressFromLocation(location);
 
                 if (address != null) {
-                    // 4. Convert the image to a Base64 string
-                    String base64Image = bitmapToBase64(bitmap);
-                    Log.e("taggg", "Employee Namehgeree: ");
-                    // 5. Prepare the data for Firestore
-                    Map<String, Object> imageData = new HashMap<>();
-                    imageData.put("user_id", uid);
-                    imageData.put("imageBase64", "tffff");
-                    imageData.put("location", address);
-                    imageData.put("created_at", System.currentTimeMillis());
-                    imageData.put("verified" ,false);
-                    imageData.put("rejected", false);
-//                    Log.e("taggg", base64Image);
-                    // 6. Upload the data to Firestore
-                    db.collection("images").document(imageId).set(imageData)
-                            .addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    Log.e("taggg", "Employee Namehgeree: 2132");
-                                    Toast.makeText(getApplicationContext(), "Image uploaded with address!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Failed to upload: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-//                    Map<String, Integer> increments = new HashMap<>();
-//                    increments.put("image_count_today", 1);
-//                    increments.put("image_count_week", 1);
-//                    increments.put("image_count_year", 1);
-//                    Map<String, Object> updates = new HashMap<>();
-//                    for (Map.Entry<String, Integer> entry : increments.entrySet()) {
-//                        updates.put(entry.getKey(), FieldValue.increment(entry.getValue()));
-//                    }
-//
-//                    // Update the document
-//                    db.collection("users").document(uid)
-//                            .update(updates)
-//                            .addOnSuccessListener(aVoid -> {
-//                                // Handle success
-//                                System.out.println("Values incremented successfully.");
-//                            })
-//                            .addOnFailureListener(e -> {
-//                                // Handle failure
-//                                System.err.println("Error incrementing values: " + e.getMessage());
-//                            });
+                    // 4. Convert Bitmap to Byte Array
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); // Compress the image (JPEG, PNG supported)
+                    byte[] data = baos.toByteArray();
+                    // 5. Get a reference to Firebase Storage
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReference();
+                    StorageReference imageRef = storageRef.child("images/" + imageId + ".jpg");
+
+                    // 6. Upload the image to Firebase Storage
+                    UploadTask uploadTask = imageRef.putBytes(data);
+
+                    // Listen for upload success/failure
+                    uploadTask.addOnSuccessListener(taskSnapshot -> {
+                        // 7. Get the download URL after successful upload
+                        imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            String downloadUrl = uri.toString();
+                            // 8. Prepare the data for Firestore
+                            Map<String, Object> imageData = new HashMap<>();
+                            imageData.put("user_id", uid);
+                            imageData.put("imageLink", downloadUrl);
+                            imageData.put("location", address);
+                            imageData.put("created_at", System.currentTimeMillis());
+                            imageData.put("verified" ,false);
+                            imageData.put("rejected", false);
+                            // 9. Save the URL and other info to Firestore
+                            db.collection("images").document(imageId).set(imageData)
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(getApplicationContext(), "Image uploaded with address!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Failed to upload: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }).addOnFailureListener(e -> {
+                            // Error: Failed to get the download URL
+                            e.printStackTrace();
+                        });
+                    }).addOnFailureListener(e -> {
+                        // Error: Failed to upload the image
+                        e.printStackTrace();
+                    });
                 } else {
                     Toast.makeText(getApplicationContext(), "Unable to fetch address", Toast.LENGTH_SHORT).show();
                 }
