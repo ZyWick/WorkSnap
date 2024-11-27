@@ -8,12 +8,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide; // Import Glide
 
 import java.util.ArrayList;
 
 public class LB_RecyclerViewAdapter extends RecyclerView.Adapter<LB_RecyclerViewAdapter.MyViewHolder> {
-    ArrayList<leaderboardModel> leaderboardModels;
-
+    private ArrayList<leaderboardModel> leaderboardModels;
 
     public LB_RecyclerViewAdapter(ArrayList<leaderboardModel> leaderboardModels) {
         this.leaderboardModels = leaderboardModels;
@@ -23,7 +23,7 @@ public class LB_RecyclerViewAdapter extends RecyclerView.Adapter<LB_RecyclerView
     @Override
     public LB_RecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_row, parent, false);
-        return new LB_RecyclerViewAdapter.MyViewHolder(view);
+        return new MyViewHolder(view);
     }
 
     @Override
@@ -31,11 +31,19 @@ public class LB_RecyclerViewAdapter extends RecyclerView.Adapter<LB_RecyclerView
         leaderboardModel currentItem = leaderboardModels.get(position);
 
         holder.employeeNameTextView.setText(currentItem.getEmployeeName());
-        holder.employeeImageView.setImageResource(currentItem.getEmployeeImage());
 
+        // Load profile photo using Glide
+        Glide.with(holder.itemView.getContext())
+                .load(currentItem.getProfilePhotoPath()) // URL from Firestore
+                .placeholder(R.drawable.danda) // Placeholder image
+                .error(R.drawable.danda) // Error image
+                .into(holder.employeeImageView);
+
+        // Load badges
         for (int i = 0; i < 3; i++) {
             holder.badgeImageViews.get(i).setImageResource(currentItem.getBadges()[i]);
         }
+
     }
 
     @Override
