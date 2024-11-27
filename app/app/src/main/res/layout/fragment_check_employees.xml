@@ -41,7 +41,8 @@
                 app:layout_constraintTop_toTopOf="@+id/verifyPhoto"
                 app:layout_constraintBottom_toBottomOf="@+id/verifyPhoto"
                 android:paddingBottom="10dp"
-                android:layout_marginEnd="25dp"/>
+                android:layout_marginEnd="25dp"
+                android:visibility="invisible"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
