@@ -32,12 +32,26 @@ public class LB_RecyclerViewAdapter extends RecyclerView.Adapter<LB_RecyclerView
 
         holder.employeeNameTextView.setText(currentItem.getEmployeeName());
 
-        // Load profile photo using Glide
-        Glide.with(holder.itemView.getContext())
-                .load(currentItem.getProfilePhotoPath()) // URL from Firestore
-                .placeholder(R.drawable.danda) // Placeholder image
-                .error(R.drawable.danda) // Error image
-                .into(holder.employeeImageView);
+        String imageUrl = currentItem.getProfilePhotoPath();
+
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            // Load image into ImageView using Glide
+            Glide.with(holder.itemView.getContext())
+                    .load(imageUrl)
+                    .placeholder(R.drawable.danda) // Optional: Add a placeholder image
+                    .error(R.drawable.momo)       // Optional: Add an error image
+                    .into(holder.employeeImageView);
+        } else {
+            // Handle missing URL
+            System.out.println("Image URL is empty!");
+        }
+//
+//        // Load profile photo using Glide
+//        Glide.with(holder.itemView.getContext())
+//                .load(currentItem.getProfilePhotoPath()) // URL from Firestore
+//                .placeholder(R.drawable.danda) // Placeholder image
+//                .error(R.drawable.danda) // Error image
+//                .into(holder.employeeImageView);
 
         // Load badges
         for (int i = 0; i < 3; i++) {

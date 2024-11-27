@@ -30,10 +30,6 @@ public class leaderboard extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseUser user = mAuth.getCurrentUser();
-    String uid = user.getUid();
-
     private LB_RecyclerViewAdapter adapter;
     ArrayList<leaderboardModel> leaderboardModels = new ArrayList<>();
     int[] employeeImages = {R.drawable.danda};
@@ -74,14 +70,18 @@ public class leaderboard extends Fragment {
         }
     }
 
+    String uid;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (getArguments() != null)
+            uid = getArguments().getString("uid");
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_leaderboard, container, false);
 
         RecyclerView recyclerView = view.findViewById(R.id.leaderboardRecyclerView);
-
 
         adapter = new LB_RecyclerViewAdapter(leaderboardModels);
         recyclerView.setAdapter(adapter);
@@ -158,7 +158,6 @@ public class leaderboard extends Fragment {
 
                             // Extract employee details
                             String employeeName = task.getResult().getString("username");
-
 
                             String profilePhotoPath = task.getResult().getString("profilePhoto");
                             if (profilePhotoPath == null || profilePhotoPath.isEmpty()) {

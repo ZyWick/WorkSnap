@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:id="@+id/ProfileMenu"
+        android:icon="@drawable/nav_profile"
+        android:title="Profile"/>
+    <item android:id="@+id/allEmployeesMenu"
+        android:icon="@drawable/nav_allemployees"
+        android:title="allEmployees"/>
+    <item android:id="@+id/checkEmployeeMenu"
+        android:icon="@drawable/nav_checkemployee"
+        android:title="checkEmployee"/>
+
+    <item android:id="@+id/SettingsMenu"
+        android:icon="@drawable/nav_settings"
+        android:title="Settings"/>
+</menu>

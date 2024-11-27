@@ -109,7 +109,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                     ArrayList<badgesData> badges = new ArrayList<>();
                                     ArrayList<String> employeeIDs = new ArrayList<>();
                                     User.put("username", fullName);
-                                    User.put("profilePhoto", R.drawable.danda);
+                                    User.put("profilePhoto", "https://firebasestorage.googleapis.com/v0/b/worksnap-9bdb3.firebasestorage.app/o/images%2Fdanda.jpeg?alt=media&token=651730df-277c-4c9e-b08a-8c36acaec419");
                                     User.put("title", title);
                                     User.put("email", email);
                                     if (validEmployerID)

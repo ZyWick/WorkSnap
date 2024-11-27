@@ -124,12 +124,16 @@ public class AllEmployee extends Fragment {
         });
     }
 
+    String uid;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         db = FirebaseFirestore.getInstance();
         usersRef = db.collection(MyFirestoreReferences.USERS_COLLECTION);
+        if (getArguments() != null)
+            uid = getArguments().getString("uid");
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_all_employee, container, false);
@@ -144,7 +148,7 @@ public class AllEmployee extends Fragment {
         // Initialize the list of Employee Data
         ArrayList<EmployeeData> EmployeeDataList = new ArrayList<>();
 
-        getEmployeeIDs("AKDCcjF5NOhBu9vKpLenIGQhfO02", new OnEmployeeIDsFetchedListener() {
+        getEmployeeIDs(uid, new OnEmployeeIDsFetchedListener() {
             @Override
             public void onSuccess(ArrayList<String> employeeIDs) {
                 if (!employeeIDs.isEmpty()) {

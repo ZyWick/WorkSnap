@@ -164,9 +164,16 @@ public class checkEmployees extends Fragment {
         this.DayAttendanceList = dayAttendanceList;
     }
 
+    String uid;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (getArguments() != null)
+            uid = getArguments().getString("uid");
+
+        Log.d("taggg", uid);
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_check_employees, container, false);
         view.findViewById(R.id.selectDate).setOnClickListener(this::selectTheDate);
@@ -177,7 +184,7 @@ public class checkEmployees extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.dayAttendanceRecycler);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        getEmployeeIDs("AKDCcjF5NOhBu9vKpLenIGQhfO02", new HereOnEmployeeIDsFetchedListener() {
+        getEmployeeIDs(uid, new HereOnEmployeeIDsFetchedListener() {
             @Override
             public void onSuccess(ArrayList<String> employeeIDs) {
                 if (!employeeIDs.isEmpty()) {

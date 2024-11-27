@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/Leaderboard"
+    <item android:id="@+id/LeaderboardMenu"
         android:icon="@drawable/nav_leaderboard"
         android:title="Leaderboard"/>
-    <item android:id="@+id/Profile"
+
+    <item android:id="@+id/ProfileMenu"
         android:icon="@drawable/nav_profile"
         android:title="Profile"/>
-    <item android:id="@+id/Settings"
+
+    <item android:id="@+id/SettingsMenu"
         android:icon="@drawable/nav_settings"
         android:title="Settings"/>
 </menu>
