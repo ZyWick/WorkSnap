@@ -34,6 +34,8 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -198,10 +200,16 @@ public class profile extends Fragment {
                                 .into(profileImage);
                     }
 
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(new Date());
+
+                    // Get the day of the week (1 = Sunday, 2 = Monday, ..., 7 = Saturday)
+                    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
                     // This shit is for the progress bar No clue what that total is supposed to be so its week /7 for now
                     if (imageCountWeek != null) {
 
-                        int progress = (int) ((imageCountWeek / 7.0) * 100);
+                        int progress = (int) ((imageCountWeek / ((dayOfWeek-1) * 5)) * 100);
                         if (progressBar != null) {
                             progressBar.setProgress(progress, true);
                         }

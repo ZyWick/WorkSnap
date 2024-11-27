@@ -199,12 +199,21 @@ public class leaderboard extends Fragment {
         switch (criteria) {
             case "daily":
                 leaderboardModels.sort((o1, o2) -> Integer.compare(o2.getImageCountDaily(), o1.getImageCountDaily()));
+                for (leaderboardModel a : leaderboardModels) {
+                    a.setLBprogress(a.getImageCountDaily(),0);
+                }
                 break;
             case "weekly":
                 leaderboardModels.sort((o1, o2) -> Integer.compare(o2.getImageCountWeekly(), o1.getImageCountWeekly()));
+                for (leaderboardModel a : leaderboardModels) {
+                    a.setLBprogress(a.getImageCountWeekly(),1);
+                }
                 break;
             case "yearly":
                 leaderboardModels.sort((o1, o2) -> Integer.compare(o2.getImageCountYearly(), o1.getImageCountYearly()));
+                for (leaderboardModel a : leaderboardModels) {
+                    a.setLBprogress(a.getImageCountYearly(),2);
+                }
                 break;
         }
         adapter.notifyDataSetChanged(); // Refresh RecyclerView

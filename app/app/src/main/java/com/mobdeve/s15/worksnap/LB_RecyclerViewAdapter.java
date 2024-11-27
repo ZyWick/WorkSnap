@@ -9,8 +9,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide; // Import Glide
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class LB_RecyclerViewAdapter extends RecyclerView.Adapter<LB_RecyclerViewAdapter.MyViewHolder> {
     private ArrayList<leaderboardModel> leaderboardModels;
@@ -45,13 +48,10 @@ public class LB_RecyclerViewAdapter extends RecyclerView.Adapter<LB_RecyclerView
             // Handle missing URL
             System.out.println("Image URL is empty!");
         }
-//
-//        // Load profile photo using Glide
-//        Glide.with(holder.itemView.getContext())
-//                .load(currentItem.getProfilePhotoPath()) // URL from Firestore
-//                .placeholder(R.drawable.danda) // Placeholder image
-//                .error(R.drawable.danda) // Error image
-//                .into(holder.employeeImageView);
+
+        holder.progressBar.setProgress(currentItem.getLBprogress(), true);
+
+
 
         // Load badges
         for (int i = 0; i < 3; i++) {
@@ -69,11 +69,13 @@ public class LB_RecyclerViewAdapter extends RecyclerView.Adapter<LB_RecyclerView
         TextView employeeNameTextView;
         ImageView employeeImageView;
         ArrayList<ImageView> badgeImageViews;
+        LinearProgressIndicator progressBar;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             employeeNameTextView = itemView.findViewById(R.id.textView);
-            employeeImageView = itemView.findViewById(R.id.textureView);
+            employeeImageView = itemView.findViewById(R.id.imageView);
+            progressBar = itemView.findViewById(R.id.progressBar);
 
             badgeImageViews = new ArrayList<>(3);
             badgeImageViews.add(itemView.findViewById(R.id.imageView4));

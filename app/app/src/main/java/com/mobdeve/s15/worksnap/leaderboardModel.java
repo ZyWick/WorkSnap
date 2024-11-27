@@ -1,6 +1,8 @@
 package com.mobdeve.s15.worksnap;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class leaderboardModel {
     private String employeeName;
@@ -34,6 +36,21 @@ public class leaderboardModel {
     private int imageCountDaily;
     private int imageCountWeekly;
     private int imageCountYearly;
+
+    private int LBprogress;
+
+    public int getLBprogress() {
+        return this.LBprogress;
+    }
+
+    public  void setLBprogress(int count_lb, int category) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+        int[] lbcategory_cap = new int[]{5, ((dayOfWeek-1) * 5), 125};
+        this.LBprogress = (int) ((count_lb / (double)lbcategory_cap[category]) * 100);
+    }
 
 
     public leaderboardModel(int[] badges, String profilePhotoPath, int imageCountDaily, int imageCountWeekly, int imageCountYearly,String employeeName) {
