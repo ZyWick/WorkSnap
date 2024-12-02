@@ -3,7 +3,9 @@ package com.mobdeve.s15.worksnap;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,7 @@ public class settings extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private TextView viewUserIdButton;
     private TextView changeUserDetailsButton;
     private TextView changePasswordButton;
     private TextView signOutButton;
@@ -68,6 +71,15 @@ public class settings extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        viewUserIdButton = view.findViewById(R.id.btn_view_user_id);
+        viewUserIdButton.setOnClickListener(v -> {
+            Fragment fragment = new ViewUserIdFragment();
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.frameLayoutt, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         changeUserDetailsButton = view.findViewById(R.id.btn_change_user_details);
         changeUserDetailsButton.setOnClickListener(v -> {

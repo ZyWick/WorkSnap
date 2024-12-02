@@ -22,11 +22,28 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/changeUserDetails"
+        android:id="@+id/viewUserId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_outline"
         app:layout_constraintTop_toBottomOf="@+id/more">
+
+        <TextView
+            android:id="@+id/btn_view_user_id"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="20dp"
+            android:text="View User ID"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/changeUserDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_outline"
+        app:layout_constraintTop_toBottomOf="@+id/viewUserId">
 
         <TextView
             android:id="@+id/btn_change_user_details"
@@ -52,7 +69,6 @@
             android:text="Change Password"
             android:textSize="15sp" />
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/signoutSettings"
