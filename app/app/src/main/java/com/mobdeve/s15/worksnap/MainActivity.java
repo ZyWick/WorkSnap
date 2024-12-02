@@ -72,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
                             bottomNavigationView.inflateMenu(R.menu.menu_c);
                             replaceFragment(new leaderboard());
                         }
+                        else {
+                            bottomNavigationView.getMenu().clear();
+                            bottomNavigationView.inflateMenu(R.menu.menu_b);
+                            replaceFragment(new AllEmployee());
+                        }
 
                     } else {
                         Log.d(TAG, "No such document");
